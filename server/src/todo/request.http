@@ -1,0 +1,44 @@
+### Get all todo categories with their todos
+GET http://localhost:3000/todos
+
+### Create a todo category
+POST http://localhost:3000/todos
+Content-Type: application/json
+
+{
+    "name":"name of category3",
+    "todos": [
+        {
+            "name": "first todo",
+            "isDeleted": false,
+            "isChecked": false
+        },
+        {
+            "name": "second todo",
+            "isDeleted": false,
+            "isChecked": false
+        }
+    ]
+}
+
+### Get category and it's todos by category id
+GET http://localhost:3000/todos/66023e7f29b83f7d7ae55b79
+
+### Add another todo to the category
+POST http://localhost:3000/todos/66023e7f29b83f7d7ae55b79
+Content-Type: application/json
+
+{
+    "name": "first todo23212",
+    "isDeleted": false,
+    "isChecked": false
+}
+
+### Checking a todo
+PATCH http://localhost:3000/todos/66023e7f29b83f7d7ae55b79
+Content-Type: application/json
+
+{
+    "name": "first todo",
+    "isChecked": true
+}
