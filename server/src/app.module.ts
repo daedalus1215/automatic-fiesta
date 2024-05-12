@@ -6,16 +6,19 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TodoCategory, TodoCategorySchema } from './todo/entity/todo-category.schema';
 import { MongooseModule } from '@nestjs/mongoose';
+import { TasksModule } from './tasks/tasks.module';
+import { Task, TaskSchema } from './tasks/schema/task/task.schema';
 
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost/test'),
-    MongooseModule.forFeature([{name: TodoCategory.name, schema: TodoCategorySchema}]),
+    MongooseModule.forFeature([{name: Task.name, schema: TaskSchema}]),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
-    TodoModule
+    TodoModule,
+    TasksModule
   ],
   controllers: [AppController],
   providers: [AppService],
