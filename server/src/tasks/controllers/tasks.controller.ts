@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
 import { TasksService } from '../services/tasks.service';
 import { UpdateTaskDto } from '../dtos/update-task/update-task.dto';
 import { DateTimeDto } from '../dtos/update-task/date-time.dto';
@@ -28,5 +28,11 @@ export class TasksController {
     async updateDateTimeOfTask(@Param('taskId') taskId, @Body() body: DateTimeDto) {
         console.log('updateTask', body)
         return await this.taskService.updateDateTimeOfTask(taskId, body);
+    }
+
+    @Get('/activities/months')
+    async fetchAllMonthTasks(@Query('includeTags') includeTags: string[], @Query(' excludeTags') excludeTags: string[]) {
+        console.log('fetchAllMonthTasks')
+        return await this.taskService.fetchAllMonthTasks(includeTags, excludeTags);
     }
 }
