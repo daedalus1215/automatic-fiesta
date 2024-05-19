@@ -4,8 +4,11 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { UpdateTaskDto } from '../dtos/update-task/update-task.dto';
 import { DateTimeDto } from '../dtos/update-task/date-time.dto';
-import { minutesToMilliseconds } from 'src/utils/minutesToMilliseconds';
-import { exclusiveFilter } from 'src/utils/exclusiveFilter';
+import { exclusiveFilter } from '../../utils/exclusiveFilter';
+import { inclusiveFilter } from '../../utils/inclusiveFilter';
+import { formatMonth } from '../../utils/getDate';
+import { truncateString } from '../../utils/truncateString';
+import { minutesToMilliseconds } from '../../utils/minutesToMilliseconds';
 
 @Injectable()
 export class TasksService {
@@ -53,7 +56,7 @@ export class TasksService {
         const tasks = await this.model.find();
         const results = {};
         const tagsWithoutExcluded = exclusiveFilter(tasks.filter(task => task?.date), excludeTags);
-        const includedAndExcludedTags = inclusivelyFilter(tagsWithoutExcluded, includeTags);
+        const includedAndExcludedTags = inclusiveFilter(tagsWithoutExcluded, includeTags);
 
         includedAndExcludedTags.forEach(task => {
             task.time
@@ -85,26 +88,30 @@ export class TasksService {
         }
 
         return newResults
-            .sort((res, res2) => new Date(res2.date) - new Date(res.date));
+            .sort(this.sort);
     };
 
-    // async fetchAllTaskTitles(title: string) {
-    //     const tasks = await this.model.find();
-    //     tasks.sort((a, b) => b.date - a.date); // Sort tasks by date in descending order
-    //     const formattedName = title?.toLowerCase();
-    //     return tasks
-    //         .filter((task) => {
-    //             if (title) {
-    //                 return task?.title?.toLowerCase().includes(formattedName) ?? false;
-    //             }
+    sort(firstDate: any, secondDate: any) {
+        return (new Date(firstDate.date) as any) - (new Date(secondDate.date) as any)
+    }
 
-    //             return true;
-    //         })
-    //         .map((task) => ({
-    //             _id: task?._id ?? 'stubAnId',
-    //             title: (task.title !== undefined) ? truncateString(task.title, 21) : 'no title'
-    //         }));
-    // }
+    async fetchAllTaskTitles(title: string) {
+        const tasks = await this.model.find();
+        tasks.sort(this.sort); // Sort tasks by date in descending order
+        const formattedName = title?.toLowerCase();
+        return tasks
+            .filter((task) => {
+                if (title) {
+                    return task?.title?.toLowerCase().includes(formattedName) ?? false;
+                }
+
+                return true;
+            })
+            .map((task) => ({
+                _id: task?._id ?? 'stubAnId',
+                title: (task.title !== undefined) ? truncateString(task.title, 21) : 'no title'
+            }));
+    }
 
 
     //@TODO: Continue here!
