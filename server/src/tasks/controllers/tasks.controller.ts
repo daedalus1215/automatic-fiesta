@@ -20,19 +20,25 @@ export class TasksController {
 
     @Put()
     async updateTask(@Body() body: UpdateTaskDto) {
-        console.log('updateTask', body)
+        console.log('updateTask', body);
         return await this.taskService.update(body);
     }
 
     @Put('/:taskId/dateTime/:id')
     async updateDateTimeOfTask(@Param('taskId') taskId, @Body() body: DateTimeDto) {
-        console.log('updateTask', body)
+        console.log('updateTask', body);
         return await this.taskService.updateDateTimeOfTask(taskId, body);
     }
 
     @Get('/activities/months')
     async fetchAllMonthTasks(@Query('includeTags') includeTags: string[], @Query(' excludeTags') excludeTags: string[]) {
-        console.log('fetchAllMonthTasks')
+        console.log('fetchAllMonthTasks');
         return await this.taskService.fetchAllMonthTasks(includeTags, excludeTags);
+    }
+
+    @Get('/tasks-titles')
+    async fetchAllTaskTitles(@Query('title') title: string) {
+        console.log('fetchAllTaskTitles');
+        return await this.taskService.fetchAllTaskTitles(title);
     }
 }

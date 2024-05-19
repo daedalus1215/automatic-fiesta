@@ -12,7 +12,10 @@ import { Task, TaskSchema } from './tasks/schema/task/task.schema';
 @Module({
   imports: [
     MongooseModule.forRoot('mongodb://localhost/test'),
-    MongooseModule.forFeature([{name: Task.name, schema: TaskSchema}]),
+    MongooseModule.forFeature([
+      { name: Task.name, schema: TaskSchema },
+      { name: TodoCategory.name, schema: TodoCategorySchema }
+    ]),
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV}`,
