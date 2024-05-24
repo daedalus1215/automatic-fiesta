@@ -1,5 +1,5 @@
 import { Task } from "src/types";
-import { inclusiveFilter } from "./inclusiveFilter";
+import { inclusiveFilter } from "../inclusiveFilter";
 
 describe('server/src/utils/__tests__/inclusiveFilter.spec.ts', () => {
     describe('inclusiveFilter', () => {

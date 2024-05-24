@@ -9,6 +9,7 @@ import { inclusiveFilter } from '../../utils/inclusiveFilter';
 import { formatMonth } from '../../utils/getDate';
 import { truncateString } from '../../utils/truncateString';
 import { minutesToMilliseconds } from '../../utils/minutesToMilliseconds';
+import { TimeVO } from '../schema/task/time.vo';
 
 @Injectable()
 export class TasksService {
@@ -55,7 +56,7 @@ export class TasksService {
     async fetchAllMonthTasks(includeTags, excludeTags) {
         const tasks = await this.model.find();
         const results = {};
-        const tagsWithoutExcluded = exclusiveFilter(tasks.filter(task => task?.date), excludeTags);
+        const tagsWithoutExcluded = exclusiveFilter(tasks.filter(task => !!task.date), excludeTags);
         const includedAndExcludedTags = inclusiveFilter(tagsWithoutExcluded, includeTags);
 
         includedAndExcludedTags.forEach(task => {
@@ -113,9 +114,21 @@ export class TasksService {
             }));
     }
 
+    async createDateTimeOfTask(taskId: string) {
+        const task = await this.model.findOne({ _id: taskId });
+        const { time } = task;
+        time.push({
+            date: new Date(),
+            time: minutesToMilliseconds("00:00"),
+        } as unknown as TimeVO);
+
+        task.time = time;
+        task.date = new Date().toString();
+        const updatedTask = await task.save();
+        return updatedTask;
+    }
 
     //@TODO: Continue here!
-    //   fetchAllMonthTasks: (includeTags, excludeTags) => fetchAllMonthTasks(includeTags, excludeTags),
     //   createDateTimeOfTask: (taskId) => CreateDateTimeRepository(taskId),
     //   fetchAllTaskTitles: (title) => FetchAllTaskTitlesRepository(title),
     //   fetchStackGraph: (date, days, predicates) => FetchStatsForStackForRangeOfDates(date, days, predicates),

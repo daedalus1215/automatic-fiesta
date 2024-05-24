@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Put, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { TasksService } from '../services/tasks.service';
 import { UpdateTaskDto } from '../dtos/update-task/update-task.dto';
 import { DateTimeDto } from '../dtos/update-task/date-time.dto';
@@ -40,5 +40,10 @@ export class TasksController {
     async fetchAllTaskTitles(@Query('title') title: string) {
         console.log('fetchAllTaskTitles');
         return await this.taskService.fetchAllTaskTitles(title);
+    }
+
+    @Post('/:taskId/dateTime')
+    async postDateTimeAction(@Param('taskId') taskId: string) {
+        return await this.taskService.createDateTimeOfTask(taskId);
     }
 }

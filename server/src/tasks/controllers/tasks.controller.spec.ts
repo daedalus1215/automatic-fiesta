@@ -12,10 +12,6 @@ describe('TasksController', () => {
     target = new TasksController(taskServiceMock);
   });
 
-  it('should be defined', () => {
-    expect(target).toBeDefined();
-  });
-
   it('should find task with id', () => {
     // Arrange
     taskServiceMock.findOne = jest.fn();
@@ -42,7 +38,7 @@ describe('TasksController', () => {
   it('should update task', () => {
     // Arrange
     taskServiceMock.update = jest.fn();
-    
+
     const body: UpdateTaskDto = {
       date: "05-12-2024",
       dateTimes: [],

@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 
+@Schema()
 export class TimeVO {
     @Prop({ required: true})
     _id: string;
@@ -10,3 +11,5 @@ export class TimeVO {
     @Prop()
     time: number;
 }
+
+export const TimeVOSchema = SchemaFactory.createForClass(TimeVO);
