@@ -8,6 +8,9 @@ import { TodoCategory, TodoCategorySchema } from './todo/entity/todo-category.sc
 import { MongooseModule } from '@nestjs/mongoose';
 import { TasksModule } from './tasks/tasks.module';
 import { Task, TaskSchema } from './tasks/schema/task/task.schema';
+import { DateUtil } from './utils/date-util';
+import { StringUtil } from './utils/string-util';
+import { FilterUtil } from './utils/filter-util';
 
 @Module({
   imports: [

@@ -4,16 +4,20 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { UpdateTaskDto } from '../dtos/update-task/update-task.dto';
 import { DateTimeDto } from '../dtos/update-task/date-time.dto';
-import { exclusiveFilter } from '../../utils/exclusiveFilter';
-import { inclusiveFilter } from '../../utils/inclusiveFilter';
-import { formatMonth } from '../../utils/getDate';
-import { truncateString } from '../../utils/truncateString';
 import { minutesToMilliseconds } from '../../utils/minutesToMilliseconds';
 import { TimeVO } from '../schema/task/time.vo';
+import { StringUtil } from '../../utils/string-util';
+import { FilterUtil } from '../../utils/filter-util';
+import { DateUtil } from '../../utils/date-util';
 
 @Injectable()
 export class TasksService {
-    constructor(@InjectModel(Task.name) private model: Model<TaskDocument>) { }
+    constructor(
+        @InjectModel(Task.name) private model: Model<TaskDocument>,
+        private readonly stringUtil: StringUtil,
+        private readonly filterUtil: FilterUtil,
+        private readonly dateUtil: DateUtil
+    ) { }
 
     async findAll() {
         return await this.model.find();
@@ -56,14 +60,14 @@ export class TasksService {
     async fetchAllMonthTasks(includeTags, excludeTags) {
         const tasks = await this.model.find();
         const results = {};
-        const tagsWithoutExcluded = exclusiveFilter(tasks.filter(task => !!task.date), excludeTags);
-        const includedAndExcludedTags = inclusiveFilter(tagsWithoutExcluded, includeTags);
+        const tagsWithoutExcluded = this.filterUtil.exclusiveFilter(tasks.filter(task => !!task.date), excludeTags);
+        const includedAndExcludedTags = this.filterUtil.inclusiveFilter(tagsWithoutExcluded, includeTags);
 
         includedAndExcludedTags.forEach(task => {
             task.time
                 .filter(time => time?.date)
                 .map(time => {
-                    const theDate = formatMonth(time.date);
+                    const theDate = this.dateUtil.formatMonth(time.date);
 
                     if (!results[theDate]) {
                         results[theDate] = { time: 0, titles: [] };
@@ -110,7 +114,7 @@ export class TasksService {
             })
             .map((task) => ({
                 _id: task?._id ?? 'stubAnId',
-                title: (task.title !== undefined) ? truncateString(task.title, 21) : 'no title'
+                title: (task.title !== undefined) ? this.stringUtil.truncateString(task.title, 21) : 'no title'
             }));
     }
 
@@ -128,10 +132,63 @@ export class TasksService {
         return updatedTask;
     }
 
-    //@TODO: Continue here!
-    //   createDateTimeOfTask: (taskId) => CreateDateTimeRepository(taskId),
-    //   fetchAllTaskTitles: (title) => FetchAllTaskTitlesRepository(title),
-    //   fetchStackGraph: (date, days, predicates) => FetchStatsForStackForRangeOfDates(date, days, predicates),
+    // @TODO: Bring this back after we migrate to class utils
+    // async fetchStatsForStackForRangeOfDates(taskId: string) (date, days, predicates) => {
+    //     const dates = getRangeOfDates(date, days);
+    //     const tasks = await getTaskBasedOnTags(predicates);
+    //     let datasets = [];
+    //     for (let task of tasks) {
+    //         const dataset = {
+    //             label: getTitle(task),
+    //             data: Array(days).fill(0),
+    //             backgroundColor: `rgb(${faker.number.int({ min: 100, max: 255 })}, ${faker.number.int({ min: 100, max: 255 })}, ${faker.number.int({ min: 100, max: 255 })})`
+    //         };
+
+    //         for (let time of task.time) {
+    //             const currentDate = formatDate(time.date);
+    //             if (currentDate === null || currentDate < dates[dates.length - 1]) {
+    //                 continue;
+    //             }
+
+    //             let index = dates.findIndex(item => {
+    //                 return item === currentDate;
+    //             });
+    //             if (index !== -1) {
+    //                 if (dataset.data[index] >= 0) {
+    //                     dataset.data[index] = dataset.data[index] + (time?.time / 1000 / 60 ?? 0)
+    //                 } else {
+    //                     dataset.data[index] = (time?.time / 1000 / 60 ?? 0)
+    //                 }
+    //             }
+    //         }
+
+    //         if (dataset.data.find(data => data > 0)) {
+    //             datasets.push(dataset);
+    //         }
+    //     }
+
+    //     return {
+    //         data: {
+    //             labels: dates,
+    //             datasets
+    //         },
+    //         options: {
+    //             "plugins": {
+    //                 "title": {
+    //                     "display": true,
+    //                     "text": `Stacked Activity over ${days} days`
+    //                 }
+    //             },
+    //             "responsive": true,
+    //             "scales": {
+    //                 "x": {
+    //                     "stacked": true
+    //                 },
+    //                 "y": {
+    //                     "stacked": true
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 }
-
-
