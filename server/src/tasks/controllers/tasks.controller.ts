@@ -40,7 +40,7 @@ export class TasksController {
     async fetchAllTaskTitles(@Query('title') title: string) {
         console.log('fetchAllTaskTitles');
         return await this.taskService.fetchAllTaskTitles(title);
-    }
+    }                       
 
     @Post('/:taskId/dateTime')
     async postDateTimeAction(@Param('taskId') taskId: string) {
