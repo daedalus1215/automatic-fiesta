@@ -7,32 +7,32 @@ const monthRegExp = /\d{4}-\d{2}/;
 @Injectable()
 export class DateUtil {
 
-    parseDate(date) {
+    parseDate(date?: Date): string {
         if (!date) return null;
         return this.getDate(date).match(dateRegExp)[0]
     }
-    getDate(date) {
+    getDate(date?: Date): string {
         if (!date) return null;
         const dtDateOnly = new Date(date.valueOf() + date.getTimezoneOffset() * 60 * 1000);
         return format(dtDateOnly, 'yyyy-MM-dd');
     };
 
-    formatDate(date) {
+    formatDate(date?: string | Date): string {
         if (date === undefined) return null;
         return format(date, 'yyyy-MM-dd').match(dateRegExp)[0];
     }
 
-    formatMonth(date) {
+    formatMonth(date?: string): string {
         if (date === undefined) return null;
         return format(date, 'yyyy-MM-dd').match(monthRegExp)[0];
     }
 
-    getMonthDate(date) {
+    getMonthDate(date?: string|Date): string {
         if (date === undefined) return null;
         return format(date, 'yyyy-MM');
     };
 
-    compareFormattedDate(date, day) {
+    compareFormattedDate(date: string|Date, day: string): boolean {
         return this.formatDate(date) === day
     }
     /**
@@ -41,7 +41,7 @@ export class DateUtil {
      * @param {Date | String} date2 either a Date or a String in the format "yyyy-MM-DD"
      * @returns 
      */
-    isEvenOrGreaterThan(date1: Date | string, date2: Date | string) {
+    isEvenOrGreaterThan(date1: Date | string, date2: Date | string): boolean {
         const firstDate = date1 instanceof Date ? this.formatDate(date1) : date1;
         const secondDate = date2 instanceof Date ? this.formatDate(date2) : date2;
         return differenceInDays(new Date(firstDate), new Date(secondDate)) >= 0;
