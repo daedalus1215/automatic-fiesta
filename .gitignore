@@ -1,3 +1,4 @@
 */dist/
 */node_modules/
-server/.env.development
+*/.env.development
+newrelic_agent.log
