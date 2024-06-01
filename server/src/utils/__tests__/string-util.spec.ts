@@ -1,6 +1,8 @@
 import { Task } from "src/types";
 import { StringUtil } from "../string-util";
 import striptags from "striptags";
+import { TaskDocument } from "src/tasks/schema/task/task.schema";
+import { Model } from "mongoose";
 
 jest.mock('striptags', () => ({
     default: jest.fn().mockImplementation(() => "<p>this will be title</p> Other stuff here that won't get brought into title")
@@ -131,6 +133,72 @@ describe('server/src/utils/__tests__/string-util.spec.ts', () => {
                 // Assert
                 expect(striptags).not.toHaveBeenCalled();
                 expect(actual).toEqual('');
+            });
+        });
+
+        describe('#getTaskBasedOnTags', () => {
+            it('should invoke find with no arguments, when predicate has null values for properties.', async () => {
+                // Arrange
+                const findSpy = jest.fn().mockImplementationOnce(() => ({}));
+
+                const model: Model<TaskDocument> = {
+                    find: findSpy
+                } as any;
+
+                // Act
+                const actual = await target.getTaskBasedOnTags(model, { includeTags: null, excludeTags: null });
+
+                // Assert
+                expect(findSpy).toHaveBeenCalledTimes(1);
+                expect(actual).toEqual({});
+            });
+
+            it('should invoke find with includeTags, when predicate has a value for includeTags property.', async () => {
+                // Arrange
+                const expectedTask: Task = {
+                    id: "taskId",
+                    tags: ['tagId'],
+                    date: "2024-12-12",
+                    time: []
+                };
+                const findSpy = jest.fn().mockImplementationOnce(() => expectedTask);
+                const includeTags = 'includeTags';
+                const expectedFilter = { "tags": { "$in": includeTags } };
+
+                const model: Model<TaskDocument> = {
+                    find: findSpy
+                } as any;
+
+                // Act
+                const actual = await target.getTaskBasedOnTags(model, { includeTags, excludeTags: null });
+
+                // Assert
+                expect(findSpy).toHaveBeenNthCalledWith(1, expectedFilter);
+                expect(actual).toEqual(expectedTask);
+            });
+
+            it('should invoke find with excludeTags, when predicate has no value for includeTags property, but has value for excludeTags.', async () => {
+                // Arrange
+                const expectedTask: Task = {
+                    id: "taskId",
+                    tags: ['tagId'],
+                    date: "2024-12-12",
+                    time: []
+                };
+                const findSpy = jest.fn().mockImplementationOnce(() => expectedTask);
+                const excludeTags = 'excludeTags';
+                const expectedFilter = { "tags": { "$nin": excludeTags } };
+
+                const model: Model<TaskDocument> = {
+                    find: findSpy
+                } as any;
+
+                // Act
+                const actual = await target.getTaskBasedOnTags(model, { includeTags: null, excludeTags });
+
+                // Assert
+                expect(findSpy).toHaveBeenNthCalledWith(1, expectedFilter);
+                expect(actual).toEqual(expectedTask);
             });
         });
     });
