@@ -1,4 +1,6 @@
 import { Injectable } from "@nestjs/common";
+import { Model } from "mongoose";
+import { TaskDocument } from "src/tasks/schema/task/task.schema";
 import { Task } from "src/types";
 import striptags from 'striptags';
 
@@ -35,4 +37,20 @@ export class StringUtil {
                 ? striptags(task.description.split("</p>")[0]?.split("<p>")[1])
                 : '');
     }
+
+    /**
+     * 
+     * @param model Model<TaskDocument>
+     * @param predicates { includeTags?: string, excludeTags?: string }
+     * @returns 
+     */
+    async getTaskBasedOnTags(model: Model<TaskDocument>, predicates: { includeTags?: string, excludeTags?: string }) {
+        const { includeTags, excludeTags } = predicates;
+        if (includeTags) {
+            return await model.find({ tags: { $in: includeTags } });
+        } else if (excludeTags) {
+            return await model.find({ tags: { $nin: excludeTags } });
+        }
+        return await model.find();
+    };
 }

@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Task, TaskDocument } from '../schema/task/task.schema';
 import { Model } from 'mongoose';
@@ -133,19 +134,19 @@ export class TasksService {
     }
 
     // @TODO: Bring this back after we migrate to class utils
-    async fetchStatsForStackForRangeOfDates(date, days, predicates) {
+    async fetchStatsForStackForRangeOfDates(date: Date, days: number, predicates: { includeTags?: string, excludeTags?: string }) {
         const dates = this.dateUtil.getRangeOfDates(date, days);
-        const tasks = await getTaskBasedOnTags(predicates);
+        const tasks = await this.stringUtil.getTaskBasedOnTags(this.model, predicates);
         let datasets = [];
         for (let task of tasks) {
             const dataset = {
-                label: getTitle(task),
+                label: this.stringUtil.getTitle(task),
                 data: Array(days).fill(0),
                 backgroundColor: `rgb(${faker.number.int({ min: 100, max: 255 })}, ${faker.number.int({ min: 100, max: 255 })}, ${faker.number.int({ min: 100, max: 255 })})`
             };
 
             for (let time of task.time) {
-                const currentDate = formatDate(time.date);
+                const currentDate = this.dateUtil.formatDate(time.date);
                 if (currentDate === null || currentDate < dates[dates.length - 1]) {
                     continue;
                 }
