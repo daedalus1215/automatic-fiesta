@@ -5,7 +5,6 @@ import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import { UpdateTaskDto } from '../dtos/update-task/update-task.dto';
 import { DateTimeDto } from '../dtos/update-task/date-time.dto';
-import { minutesToMilliseconds } from '../../utils/minutesToMilliseconds';
 import { TimeVO } from '../schema/task/time.vo';
 import { StringUtil } from '../../utils/string-util';
 import { FilterUtil } from '../../utils/filter-util';
@@ -24,7 +23,7 @@ export class TasksService {
         return await this.model.find();
     }
 
-    async findOne(id: string) {
+    async findOne(id?: string) {
         if (!id) {
             throw new Error('Need id');
         }
@@ -47,7 +46,7 @@ export class TasksService {
 
         const dateTimes = task.time.map((dateTimeFromDb) => {
             if (dateTimeFromDb._id == dto._id) {
-                return Object.assign(dateTimeFromDb, { ...dto, time: minutesToMilliseconds(dto.time) });
+                return Object.assign(dateTimeFromDb, { ...dto, time: this.dateUtil.minutesToMilliseconds(dto.time) });
             }
 
             return dateTimeFromDb;
@@ -124,7 +123,7 @@ export class TasksService {
         const { time } = task;
         time.push({
             date: new Date(),
-            time: minutesToMilliseconds("00:00"),
+            time: this.dateUtil.minutesToMilliseconds("00:00"),
         } as unknown as TimeVO);
 
         task.time = time;

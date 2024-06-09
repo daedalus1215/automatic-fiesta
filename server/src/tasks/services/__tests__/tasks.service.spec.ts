@@ -31,7 +31,7 @@ describe('server/src/tasks/services/__tests__/tasks.service.spec.ts', () => {
         });
 
         describe('#findOne', () => {
-            it('should', async () => {
+            it('should call find single task by id, when id is present', async () => {
                 // Arrange
                 const expected: Task = {
                     id: "",
@@ -54,7 +54,17 @@ describe('server/src/tasks/services/__tests__/tasks.service.spec.ts', () => {
 
             //@TODO: Left off here
         });
+        it('should throw new Error, when id is missing', async () => {
+            // Arrange
+            modelMock.findById = jest.fn();
 
-        
+            // Act & Assert
+            await expect(target.findOne()).rejects.toThrow('Need id');
+            expect(modelMock.findById).not.toHaveBeenCalled();
+        });
+
+
+        //@TODO: Left off here
+
     });
 });
