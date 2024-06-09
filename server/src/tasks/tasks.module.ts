@@ -7,7 +7,7 @@ import { UtilModule } from 'src/utils/utils.module';
 
 @Module({
   controllers: [TasksController],
-  providers: [TasksService,],
+  providers: [TasksService],
   imports: [
     MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }]),
     UtilModule

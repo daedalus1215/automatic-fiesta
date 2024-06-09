@@ -30,7 +30,7 @@ export class TasksService {
         return await this.model.findById(id);
     }
 
-    async update(dto: UpdateTaskDto) {
+    async update(dto?: UpdateTaskDto) {
         if (!dto) {
             throw new Error('dto')
         }
