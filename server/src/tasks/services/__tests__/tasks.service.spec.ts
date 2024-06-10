@@ -7,6 +7,8 @@ import { FilterUtil } from "../../../utils/filter-util";
 import { DateUtil } from "../../../utils/date-util";
 import { UpdateTaskDto } from "src/tasks/dtos/update-task/update-task.dto";
 import { RandomUtils } from "../../../utils/random-utils";
+import { DateTimeDto } from "src/tasks/dtos/update-task/date-time.dto";
+import { NotFoundException } from "@nestjs/common";
 
 describe('server/src/tasks/services/__tests__/tasks.service.spec.ts', () => {
     describe('taskService', () => {
@@ -99,30 +101,95 @@ describe('server/src/tasks/services/__tests__/tasks.service.spec.ts', () => {
         });
 
         describe('#updateDateTimeOfTask', () => {
-            it('should...', () => {
+            it("should replace the dateTime based on dto's id", async () => {
                 // Arrange
-                const expected: Task = {
-                    id: randomUtils.randomString(),
+                const taskId = randomUtils.randomString();
+                const dto: DateTimeDto = {
+                    _id: randomUtils.randomString(),
+                    date: '12-13-2024',
+                    time: "22"
+                };
+                const task = {
+                    _id: taskId,
                     tags: [randomUtils.randomString()],
-                    description: randomUtils.randomString(),
-                    date: '12-12-2024',
-                    title: randomUtils.randomString(),
+                    date: '12-13-2024',
                     time: [{
-                        _id: randomUtils.randomString(),
-                        date: '12-12-2024',
-                        time: 133
+                        _id: dto._id,
+                        date: '12-13-2024',
+                        time: 40
                     },
                     {
                         _id: randomUtils.randomString(),
-                        date: '12-12-2025',
-                        time: 144
+                        date: '12-12-2024',
+                        time: 24
+                    }],
+                    save() {
+                        return this;
                     }
-                ]
                 };
-                //@TODO: Left off here
+
+                const expected = {
+                    _id: dto._id,
+                    date: '12-13-2024',
+                    time: 1320000
+                };
+                const expectedTask = { ...task };
+                expectedTask.time[0] = expected;
+
+
+                modelMock.findOne = jest.fn().mockImplementationOnce(() => task);
+
                 // Act
-                target.updateDateTimeOfTask(expected.id, )
+                const actual = await target.updateDateTimeOfTask(taskId, dto);
+
                 // Assert
+                expect(modelMock.findOne).toHaveBeenNthCalledWith(1, {_id: taskId});
+                expect(actual).toEqual(expectedTask);
+                expect(actual.time.find(item => item._id === dto._id)).toEqual(expected)
+            });
+
+            it("should throw NotFoundException, when task does not exist in db", async () => {
+                // Arrange
+                const taskId = randomUtils.randomString();
+                const dto: DateTimeDto = {
+                    _id: randomUtils.randomString(),
+                    date: '12-13-2024',
+                    time: "22"
+                };
+                const task = {
+                    tags: [randomUtils.randomString()],
+                    date: '12-13-2024',
+                    time: [{
+                        _id: dto._id,
+                        date: '12-13-2024',
+                        time: 40
+                    },
+                    {
+                        _id: randomUtils.randomString(),
+                        date: '12-12-2024',
+                        time: 24
+                    }],
+                    save() {
+                        return this;
+                    }
+                };
+
+                const expected = {
+                    _id: dto._id,
+                    date: '12-13-2024',
+                    time: 1320000
+                };
+                const expectedTask = { ...task };
+                expectedTask.time[0] = expected;
+
+
+                modelMock.findOne = jest.fn().mockImplementationOnce(() => null);
+
+                // Act
+                await expect(target.updateDateTimeOfTask(taskId, dto)).rejects.toThrow("task not found");
+
+                // Assert
+                expect(modelMock.findOne).toHaveBeenNthCalledWith(1, {_id: taskId});
             });
         });
     });
