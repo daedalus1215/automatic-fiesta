@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:4.4
+    container_name: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: test
+    ports:
+      - "27017:27017"
+    networks:
+      - mynetwork
+
+  app:
+    build: .
+    container_name: nestjs-app
+    environment:
+      DATABASE_HOST: mongo
+      DATABASE_PORT: 27017
+      DATABASE_USER: root
+      DATABASE_PASSWORD: example
+      DATABASE_NAME: test
+      NODE_ENV: development
+    depends_on:
+      - mongo
+    ports:
+      - "3000:3000"
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.28.0.0/16                
+
+volumes:
+    react-timer-db:
