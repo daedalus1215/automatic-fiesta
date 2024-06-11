@@ -66,7 +66,7 @@ export class TasksService {
         includedAndExcludedTags.forEach(task => {
             task.time
                 .filter(time => time?.date)
-                .map(time => {
+                .forEach(time => {
                     const theDate = this.dateUtil.formatMonth(time.date);
 
                     if (!results[theDate]) {
@@ -76,6 +76,7 @@ export class TasksService {
                     results[theDate].time += time.time;
 
                     const title = task?.title ?? 'no title';
+
                     if (results[theDate]?.titles.indexOf(title) === -1) {
                         results[theDate].titles.push(title);
                     }
@@ -120,6 +121,10 @@ export class TasksService {
 
     async createDateTimeOfTask(taskId: string) {
         const task = await this.model.findOne({ _id: taskId });
+        // @TODO: add this to my UTs
+        if (!task) {
+            throw new NotFoundException(`no task with taskId ${taskId}`)
+        }
         const { time } = task;
         time.push({
             date: new Date(),
