@@ -8,7 +8,6 @@ import { DateUtil } from "../../../utils/date-util";
 import { UpdateTaskDto } from "src/tasks/dtos/update-task/update-task.dto";
 import { RandomUtils } from "../../../utils/random-utils";
 import { DateTimeDto } from "src/tasks/dtos/update-task/date-time.dto";
-import { NotFoundException } from "@nestjs/common";
 
 describe('server/src/tasks/services/__tests__/tasks.service.spec.ts', () => {
     describe('taskService', () => {

@@ -9,6 +9,7 @@ import { TimeVO } from '../schema/task/time.vo';
 import { StringUtil } from '../../utils/string-util';
 import { FilterUtil } from '../../utils/filter-util';
 import { DateUtil } from '../../utils/date-util';
+import { GroupTitlesBasedOnDateAssembler } from '../assemblers/group-titles-based-on-date-assembler';
 
 @Injectable()
 export class TasksService {
@@ -16,7 +17,8 @@ export class TasksService {
         @InjectModel(Task.name) private model: Model<TaskDocument>,
         private readonly stringUtil: StringUtil,
         private readonly filterUtil: FilterUtil,
-        private readonly dateUtil: DateUtil
+        private readonly dateUtil: DateUtil,
+        private readonly groupTitlesBasedOnDateAssembler: GroupTitlesBasedOnDateAssembler,
     ) { }
 
     async findAll() {
@@ -59,30 +61,11 @@ export class TasksService {
 
     async fetchAllMonthTasks(includeTags, excludeTags) {
         const tasks = await this.model.find();
-        const results = {};
         const tagsWithoutExcluded = this.filterUtil.exclusiveFilter(tasks.filter(task => !!task.date), excludeTags);
         const includedAndExcludedTags = this.filterUtil.inclusiveFilter(tagsWithoutExcluded, includeTags);
+        const results = this.groupTitlesBasedOnDateAssembler.apply(includedAndExcludedTags)
 
-        includedAndExcludedTags.forEach(task => {
-            task.time
-                .filter(time => time?.date)
-                .forEach(time => {
-                    const theDate = this.dateUtil.formatMonth(time.date);
-
-                    if (!results[theDate]) {
-                        results[theDate] = { time: 0, titles: [] };
-                    }
-
-                    results[theDate].time += time.time;
-
-                    const title = task?.title ?? 'no title';
-
-                    if (results[theDate]?.titles.indexOf(title) === -1) {
-                        results[theDate].titles.push(title);
-                    }
-
-                });
-        });
+        //@TODO: Maybe use a converter here or something. Or use it in the assembler.
         const newResults = [];
         const keys = Object.keys(results);
 
