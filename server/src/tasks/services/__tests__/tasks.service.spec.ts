@@ -182,7 +182,6 @@ describe('server/src/tasks/services/__tests__/tasks.service.spec.ts', () => {
                 const expectedTask = { ...task };
                 expectedTask.time[0] = expected;
 
-
                 modelMock.findOne = jest.fn().mockImplementationOnce(() => null);
 
                 // Act
