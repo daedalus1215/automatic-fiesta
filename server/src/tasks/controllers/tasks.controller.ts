@@ -32,15 +32,14 @@ export class TasksController {
 
     @Get('/activities/months')
     async fetchAllMonthTasks(@Query('includeTags') includeTags: string[], @Query(' excludeTags') excludeTags: string[]) {
-        console.log('fetchAllMonthTasks');
-        return await this.taskService.fetchAllMonthTasks(includeTags, excludeTags);
+        return await this.taskService.fetchTasksForAllMonths(includeTags, excludeTags);
     }
 
     @Get('/tasks-titles')
     async fetchAllTaskTitles(@Query('title') title: string) {
         console.log('fetchAllTaskTitles');
         return await this.taskService.fetchAllTaskTitles(title);
-    }                       
+    }
 
     @Post('/:taskId/dateTime')
     async postDateTimeAction(@Param('taskId') taskId: string) {

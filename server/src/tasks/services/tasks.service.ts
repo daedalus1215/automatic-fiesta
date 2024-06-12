@@ -7,18 +7,16 @@ import { UpdateTaskDto } from '../dtos/update-task/update-task.dto';
 import { DateTimeDto } from '../dtos/update-task/date-time.dto';
 import { TimeVO } from '../schema/task/time.vo';
 import { StringUtil } from '../../utils/string-util';
-import { FilterUtil } from '../../utils/filter-util';
 import { DateUtil } from '../../utils/date-util';
-import { GroupTitlesBasedOnDateAssembler } from '../assemblers/group-titles-based-on-date-assembler';
+import { FetchAllMonthTasks } from '../transacription-scripts/fetch-all-month-tasks/fetch-all-month-tasks.transcription-script';
 
 @Injectable()
 export class TasksService {
     constructor(
         @InjectModel(Task.name) private model: Model<TaskDocument>,
         private readonly stringUtil: StringUtil,
-        private readonly filterUtil: FilterUtil,
         private readonly dateUtil: DateUtil,
-        private readonly groupTitlesBasedOnDateAssembler: GroupTitlesBasedOnDateAssembler,
+        private readonly fetchAllMonthTasks: FetchAllMonthTasks
     ) { }
 
     async findAll() {
@@ -59,27 +57,12 @@ export class TasksService {
         return await task.save();
     }
 
-    async fetchAllMonthTasks(includeTags, excludeTags) {
-        const tasks = await this.model.find();
-        const tagsWithoutExcluded = this.filterUtil.exclusiveFilter(tasks.filter(task => !!task.date), excludeTags);
-        const includedAndExcludedTags = this.filterUtil.inclusiveFilter(tagsWithoutExcluded, includeTags);
-        const results = this.groupTitlesBasedOnDateAssembler.apply(includedAndExcludedTags)
-
-        //@TODO: Maybe use a converter here or something. Or use it in the assembler.
-        const newResults = [];
-        const keys = Object.keys(results);
-
-        for (let key of keys) {
-            newResults.push({
-                date: key,
-                ...results[key]
-            })
-        }
-
-        return newResults
-            .sort(this.sort);
+    //@TODO: Unit test this
+    fetchTasksForAllMonths(includeTags?: string[], excludeTags?: string[]) {
+        return this.fetchAllMonthTasks.apply(includeTags, excludeTags);
     };
 
+    //@TODO: Might need to make this a helper
     sort(firstDate: any, secondDate: any) {
         return (new Date(firstDate.date) as any) - (new Date(secondDate.date) as any)
     }

@@ -3,10 +3,8 @@ import { Task, groupTitlesBasedOnDate } from "src/types";
 import { DateUtil } from "src/utils/date-util";
 
 @Injectable()
-export class GroupTitlesBasedOnDateAssembler {
-    constructor(private readonly dateUtil: DateUtil) {
-
-    }
+export class GroupTitlesBasedOnDateConverter {
+    constructor(private readonly dateUtil: DateUtil) {}
 
     /**
      * 
