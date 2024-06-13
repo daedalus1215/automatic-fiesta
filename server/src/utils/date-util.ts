@@ -87,4 +87,8 @@ export class DateUtil {
 
         return minutesToMilliseconds + secondsToMilliseconds;
     }
+
+    sort(firstDate: any, secondDate: any) {
+        return (new Date(firstDate.date) as any) - (new Date(secondDate.date) as any)
+    }
 }

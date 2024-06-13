@@ -9,6 +9,8 @@ import { TimeVO } from '../schema/task/time.vo';
 import { StringUtil } from '../../utils/string-util';
 import { DateUtil } from '../../utils/date-util';
 import { FetchAllMonthTasks } from '../transacription-scripts/fetch-all-month-tasks/fetch-all-month-tasks.transcription-script';
+import { FetchAllTaskTitles } from '../transacription-scripts/fetch-all-task-titles/fetch-all-task-titles.transcription-script';
+import { CreateDateTimeOfTask } from '../transacription-scripts/create-date-time.transcription-script/create-date-time.transcription-script';
 
 @Injectable()
 export class TasksService {
@@ -16,7 +18,9 @@ export class TasksService {
         @InjectModel(Task.name) private model: Model<TaskDocument>,
         private readonly stringUtil: StringUtil,
         private readonly dateUtil: DateUtil,
-        private readonly fetchAllMonthTasks: FetchAllMonthTasks
+        private readonly fetchAllMonthTasks: FetchAllMonthTasks,
+        private readonly fetchAllTaskTitles: FetchAllTaskTitles,
+        private readonly createDateTimeOfTask: CreateDateTimeOfTask,
     ) { }
 
     async findAll() {
@@ -38,7 +42,7 @@ export class TasksService {
     }
 
     async updateDateTimeOfTask(taskId: string, dto: DateTimeDto) {
-        const task = await this.model.findOne({ _id: taskId });
+        const task = await this.model.findById(taskId);
 
         if (!task) {
             throw new NotFoundException("task not found");
@@ -62,45 +66,13 @@ export class TasksService {
         return this.fetchAllMonthTasks.apply(includeTags, excludeTags);
     };
 
-    //@TODO: Might need to make this a helper
-    sort(firstDate: any, secondDate: any) {
-        return (new Date(firstDate.date) as any) - (new Date(secondDate.date) as any)
+    //@TODO: Unit test this
+    async fetchAllTitles(title: string) {
+        return await this.fetchAllTaskTitles.apply(title);
     }
 
-    async fetchAllTaskTitles(title: string) {
-        const tasks = await this.model.find();
-        tasks.sort(this.sort); // Sort tasks by date in descending order
-        const formattedName = title?.toLowerCase();
-        return tasks
-            .filter((task) => {
-                if (title) {
-                    return task?.title?.toLowerCase().includes(formattedName) ?? false;
-                }
-
-                return true;
-            })
-            .map((task) => ({
-                _id: task?._id ?? 'stubAnId',
-                title: (task.title !== undefined) ? this.stringUtil.truncateString(task.title, 21) : 'no title'
-            }));
-    }
-
-    async createDateTimeOfTask(taskId: string) {
-        const task = await this.model.findOne({ _id: taskId });
-        // @TODO: add this to my UTs
-        if (!task) {
-            throw new NotFoundException(`no task with taskId ${taskId}`)
-        }
-        const { time } = task;
-        time.push({
-            date: new Date(),
-            time: this.dateUtil.minutesToMilliseconds("00:00"),
-        } as unknown as TimeVO);
-
-        task.time = time;
-        task.date = new Date().toString();
-        const updatedTask = await task.save();
-        return updatedTask;
+    async createDateTime(taskId: string) {
+        return this.createDateTimeOfTask.apply(taskId);
     }
 
     // @TODO: Bring this back after we migrate to class utils
