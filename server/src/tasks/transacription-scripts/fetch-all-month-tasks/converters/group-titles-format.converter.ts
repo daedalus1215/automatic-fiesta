@@ -1,7 +1,10 @@
 import { Injectable } from "@nestjs/common";
+import { DateUtil } from "src/utils/date-util";
 
 @Injectable()
 export class GroupTitlesFormatConverter {
+    constructor(private readonly dateUtil: DateUtil) { }
+    
     apply(results) {
         const newResults = [];
         const keys = Object.keys(results);
@@ -14,10 +17,6 @@ export class GroupTitlesFormatConverter {
         }
 
         return newResults
-            .sort(this.sort);
-    }
-
-    sort(firstDate: any, secondDate: any) {
-        return (new Date(firstDate.date) as any) - (new Date(secondDate.date) as any)
+            .sort(this.dateUtil.sort);
     }
 }

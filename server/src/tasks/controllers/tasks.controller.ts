@@ -10,11 +10,13 @@ export class TasksController {
 
     @Get()
     async findAll() {
+        console.log('findAll')
         return await this.taskService.findAll();
     }
 
     @Get('/:id')
     async findOne(@Param('id') id: string) {
+        console.log('findOne')
         return await this.taskService.findOne(id);
     }
 
@@ -38,11 +40,11 @@ export class TasksController {
     @Get('/tasks-titles')
     async fetchAllTaskTitles(@Query('title') title: string) {
         console.log('fetchAllTaskTitles');
-        return await this.taskService.fetchAllTaskTitles(title);
+        return await this.taskService.fetchAllTitles(title);
     }
 
     @Post('/:taskId/dateTime')
     async postDateTimeAction(@Param('taskId') taskId: string) {
-        return await this.taskService.createDateTimeOfTask(taskId);
+        return await this.taskService.createDateTime(taskId);
     }
 }
