@@ -13,9 +13,15 @@ export class TasksController {
         console.log('findAll')
         return await this.taskService.findAll();
     }
+    
+    @Get('/stack-graph')
+    async statsForRangeOfDates(@Query('date') date?: Date, @Query('days') days?: number, @Query('predicates') predicates?: { includeTags?: string, excludeTags?: string }) {
+        console.log('yes')
+        return await this.taskService.fetchStats(date, days, predicates);
+    }
 
     @Get('/:id')
-    async findOne(@Param('id') id: string) {
+    async findOne(@Param('id') id?: string) {
         console.log('findOne')
         return await this.taskService.findOne(id);
     }
@@ -26,7 +32,7 @@ export class TasksController {
         return await this.taskService.update(body);
     }
 
-    @Put('/:taskId/dateTime/:id')
+    @Put('/:taskId/dateTime')
     async updateDateTimeOfTask(@Param('taskId') taskId, @Body() body: DateTimeDto) {
         console.log('updateTask', body);
         return await this.taskService.updateDateTimeOfTask(taskId, body);
@@ -47,4 +53,5 @@ export class TasksController {
     async postDateTimeAction(@Param('taskId') taskId: string) {
         return await this.taskService.createDateTime(taskId);
     }
+
 }
