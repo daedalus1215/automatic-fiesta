@@ -44,13 +44,19 @@ export class StringUtil {
      * @param predicates { includeTags?: string, excludeTags?: string }
      * @returns 
      */
-    async getTaskBasedOnTags(model: Model<TaskDocument>, predicates: { includeTags?: string, excludeTags?: string }) {
+    async getTaskBasedOnTags(model: Model<TaskDocument>, predicates?: { includeTags?: string, excludeTags?: string }) {
+        if (!predicates)  {
+            return await model.find();
+        }
+
         const { includeTags, excludeTags } = predicates;
+
         if (includeTags) {
             return await model.find({ tags: { $in: includeTags } });
         } else if (excludeTags) {
             return await model.find({ tags: { $nin: excludeTags } });
         }
+        
         return await model.find();
     };
 }

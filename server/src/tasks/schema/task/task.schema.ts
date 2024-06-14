@@ -1,11 +1,12 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { TimeVO } from "./time.vo";
+import { ObjectId } from "typeorm";
 
 export type TaskDocument = Task & Document;
 
 @Schema()
 export class Task {
-    @Prop({ alias: "_id" })
+    @Prop({ alias: "_id", type: ObjectId })
     id: string;
 
     @Prop()
