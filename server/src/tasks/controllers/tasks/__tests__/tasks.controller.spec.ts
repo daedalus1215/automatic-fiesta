@@ -1,7 +1,7 @@
-import { DateTimeDto } from "../dtos/update-task/date-time.dto";
-import { UpdateTaskDto } from "../dtos/update-task/update-task.dto";
-import { TasksService } from "../services/tasks.service";
-import { TasksController } from "./tasks.controller";
+import { DateTimeDto } from "../../../dtos/update-task/date-time.dto";
+import { UpdateTaskDto } from "../../../dtos/update-task/update-task.dto";
+import { TasksService } from "../../../services/tasks.service";
+import { TasksController } from "../tasks.controller";
 
 describe('TasksController', () => {
   let target: TasksController;
