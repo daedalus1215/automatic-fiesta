@@ -13,11 +13,9 @@ import { UpdateDateTime } from '../transacription-scripts/tasks/update-date-time
 export class TasksService {
     constructor(
         @InjectModel(Task.name) private model: Model<TaskDocument>,
-        private readonly dateUtil: DateUtil,
         private readonly fetchAllTaskTitles: FetchAllTaskTitles,
         private readonly createDateTimeOfTask: CreateDateTimeOfTask,
-        private readonly updateDateTime: UpdateDateTime
-    ) { }
+        private readonly updateDateTime: UpdateDateTime) { }
 
     async findAll() {
         return await this.model.find();

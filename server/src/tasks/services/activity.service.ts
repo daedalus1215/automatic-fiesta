@@ -1,12 +1,14 @@
 import { Injectable } from "@nestjs/common";
 import { FetchStatsForStackForRangeOfDates } from "../transacription-scripts/activities/fetch-stats-for-stack-for-range/fetch-stats-for-stack-for-range-dates.transcription-scripts";
 import { FetchAllMonthTasks } from "../transacription-scripts/activities/fetch-all-month-tasks/fetch-all-month-tasks.transcription-script";
+import { FetchTodaysTasks } from "../transacription-scripts/activities/fetch-todays-tasks/fetch-todays-tasks.transcriptionScript";
 
 @Injectable()
 export class ActivityService {
     constructor(
         private readonly fetchStatsForStackForRangeOfDates: FetchStatsForStackForRangeOfDates,
         private readonly fetchAllMonthTasks: FetchAllMonthTasks,
+        private readonly fetchTodaysTasks: FetchTodaysTasks
     ) { }
 
     // @TODO: Bring this back after we migrate to class utils
@@ -18,4 +20,12 @@ export class ActivityService {
     fetchTasksForAllMonths(includeTags?: string[], excludeTags?: string[]) {
         return this.fetchAllMonthTasks.apply(includeTags, excludeTags);
     };
+
+    fetchTodaysActivity(date:string, includeTags:string[], excludeTags:string[]) {
+        return this.fetchTodaysTasks.apply(date, includeTags, excludeTags); 
+    }
+
+    fetchAllDayTasks() {
+        // @TODO: 
+    }
 }

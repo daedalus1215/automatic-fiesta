@@ -5,9 +5,9 @@ import { ActivityService } from "../../services/activity.service";
 export class ActivityController {
     constructor(private activityService: ActivityService) { }
 
-    @Get('/stack-graph')
-    async statsForRangeOfDates(@Query('date') date?: Date, @Query('days') days?: number, @Query('predicates') predicates?: { includeTags?: string, excludeTags?: string }) {
-        return await this.activityService.fetchStats(date, days, predicates);
+    @Get('/today')
+    async fetchTodaysActivity(@Query('date') date: string, @Query('includeTags') includeTags: string[], @Query(' excludeTags') excludeTags: string[]) {
+        return this.activityService.fetchTodaysActivity(date, includeTags, excludeTags);
     }
 
     @Get('/months')
@@ -16,12 +16,13 @@ export class ActivityController {
     }
 
     @Get('/months/today')
-    async getTodaysActivityAction() {
-        // @TODO: fill me in
+    async getTodaysActivity() {
+        return this.activityService.fetchTasksForAllMonths();
     }
 
-    @Get('/months/all')
-    async getAllDayTasksAction() {
-        // @TODO: fill me in
+    @Get('/stack-graph')
+    async statsForRangeOfDates(@Query('date') date?: Date, @Query('days') days?: number, @Query('predicates') predicates?: { includeTags?: string, excludeTags?: string }) {
+        return await this.activityService.fetchStats(date, days, predicates);
     }
+
 }
