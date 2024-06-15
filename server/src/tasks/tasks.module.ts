@@ -13,6 +13,7 @@ import { ActivityController } from './controllers/activity/activity.controller';
 import { FetchAllMonthTasks } from './transacription-scripts/activities/fetch-all-month-tasks/fetch-all-month-tasks.transcription-script';
 import { GroupTitlesFormatConverter } from './transacription-scripts/activities/fetch-all-month-tasks/converters/group-titles-format.converter';
 import { GroupTitlesBasedOnDateConverter } from './transacription-scripts/activities/fetch-all-month-tasks/converters/group-titles-based-on-date.converter';
+import { FetchTodaysTasks } from './transacription-scripts/activities/fetch-todays-tasks/fetch-todays-tasks.transcriptionScript';
 
 @Module({
   controllers: [TasksController, ActivityController],
@@ -30,7 +31,8 @@ import { GroupTitlesBasedOnDateConverter } from './transacription-scripts/activi
     FetchAllTaskTitles,
     CreateDateTimeOfTask,
     FetchStatsForStackForRangeOfDates,
-    UpdateDateTime
+    UpdateDateTime,
+    FetchTodaysTasks,
   ],
   imports: [
     MongooseModule.forFeature([{ name: Task.name, schema: TaskSchema }]),
