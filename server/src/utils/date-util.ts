@@ -88,7 +88,15 @@ export class DateUtil {
         return minutesToMilliseconds + secondsToMilliseconds;
     }
 
+
+    // @TODO: Unit Test this method
     sort(firstDate: any, secondDate: any) {
         return (new Date(firstDate.date) as any) - (new Date(secondDate.date) as any)
     }
+
+    // @TODO: Unit Test this method
+    millisToMinutesAndSeconds(millis) {
+        const seconds = parseInt(((millis % 60000) / 1000).toFixed(0));
+        return `${Math.floor(millis / 60000)}:${(seconds < 10 ? "0" : "")}${seconds}`;
+    };
 }
