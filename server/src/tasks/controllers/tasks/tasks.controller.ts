@@ -39,7 +39,7 @@ export class TasksController {
         return await this.taskService.delete(id);
     }
 
-    @Delete('/')
+    @Delete()
     async deleteTasks() {
         return await this.taskService.deleteAll();
     }

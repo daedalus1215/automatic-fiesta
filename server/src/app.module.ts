@@ -7,6 +7,7 @@ import { TodoCategory, TodoCategorySchema } from './todo/entity/todo-category.sc
 import { MongooseModule } from '@nestjs/mongoose';
 import { TasksModule } from './tasks/tasks.module';
 import { Task, TaskSchema } from './tasks/schema/task/task.schema';
+import { TagsModule } from './tags/tags.module';
 
 @Module({
   imports: [
@@ -31,7 +32,8 @@ import { Task, TaskSchema } from './tasks/schema/task/task.schema';
       { name: TodoCategory.name, schema: TodoCategorySchema }
     ]),
     TodoModule,
-    TasksModule
+    TasksModule,
+    TagsModule
   ],
   controllers: [AppController],
   providers: [AppService],
