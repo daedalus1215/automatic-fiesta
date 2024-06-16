@@ -10,14 +10,14 @@ export class ActivityController {
         return this.activityService.fetchTodaysActivity(date, includeTags, excludeTags);
     }
 
+    @Get('/all')
+    async getTodaysActivity(@Query('includeTags') includeTags: string[], @Query(' excludeTags') excludeTags: string[]) {
+        return this.activityService.fetchAllDayTasks(includeTags, excludeTags);
+    }
+
     @Get('/months')
     async fetchAllMonthTasks(@Query('includeTags') includeTags: string[], @Query(' excludeTags') excludeTags: string[]) {
         return await this.activityService.fetchTasksForAllMonths(includeTags, excludeTags);
-    }
-
-    @Get('/months/today')
-    async getTodaysActivity() {
-        return this.activityService.fetchTasksForAllMonths();
     }
 
     @Get('/stack-graph')

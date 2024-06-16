@@ -1,16 +1,26 @@
-import { Body, Controller, Get, Param, Post, Put, Query } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
 import { TasksService } from '../../services/tasks.service';
 import { UpdateTaskDto } from '../../dtos/update-task/update-task.dto';
 import { DateTimeDto } from '../../dtos/update-task/date-time.dto';
 
 @Controller('tasks')
 export class TasksController {
-    constructor(private taskService: TasksService) {}
+    constructor(private taskService: TasksService) { }
 
     @Get()
     async findAll() {
         console.log('findAll')
         return await this.taskService.findAll();
+    }
+
+    @Post()
+    async createNewTask() {
+        return await this.taskService.createNewTask();
+    }
+
+    @Put()
+    async updateTask(@Body() body: UpdateTaskDto) {
+        return await this.taskService.update(body);
     }
 
     @Get('/:id')
@@ -19,10 +29,25 @@ export class TasksController {
         return await this.taskService.findOne(id);
     }
 
-    @Put()
-    async updateTask(@Body() body: UpdateTaskDto) {
-        console.log('updateTask', body);
-        return await this.taskService.update(body);
+    @Get('/tasks-titles')
+    async fetchAllTaskTitles(@Query('title') title: string) {
+        return await this.taskService.fetchAllTitles(title);
+    }
+
+    @Delete('/:id')
+    async deleteTask(@Query('id') id: string) {
+        return await this.taskService.delete(id);
+    }
+
+    @Delete('/')
+    async deleteTasks() {
+        return await this.taskService.deleteAll();
+    }
+
+    // migrate to a datetime controller
+    @Post('/:taskId/dateTime')
+    async postDateTimeAction(@Param('taskId') taskId: string) {
+        return await this.taskService.createDateTime(taskId);
     }
 
     @Put('/:taskId/dateTime')
@@ -30,15 +55,7 @@ export class TasksController {
         console.log('updateTask', body);
         return await this.taskService.updateDateTimeOfTask(taskId, body);
     }
-
-    @Get('/tasks-titles')
-    async fetchAllTaskTitles(@Query('title') title: string) {
-        console.log('fetchAllTaskTitles');
-        return await this.taskService.fetchAllTitles(title);
-    }
-
-    @Post('/:taskId/dateTime')
-    async postDateTimeAction(@Param('taskId') taskId: string) {
-        return await this.taskService.createDateTime(taskId);
-    }
 }
+
+
+
