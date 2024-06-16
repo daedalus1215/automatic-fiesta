@@ -26,11 +26,6 @@ import { TagsModule } from './tags/tags.module';
       },
       inject: [ConfigService],
     }),
-    // MongooseModule.forRoot(`mongodb://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`),
-    MongooseModule.forFeature([
-      { name: Task.name, schema: TaskSchema },
-      { name: TodoCategory.name, schema: TodoCategorySchema }
-    ]),
     TodoModule,
     TasksModule,
     TagsModule
