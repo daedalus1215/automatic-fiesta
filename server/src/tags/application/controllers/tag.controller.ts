@@ -1,5 +1,7 @@
-import { Controller, Delete, Get, Param, Query } from "@nestjs/common";
-import { TagService } from "../services/tag.service";
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from "@nestjs/common";
+import { TagService } from "../../domain/services/tag.service";
+import { tagDto } from "src/tags/domain/dtos/tag.dto";
+import { UpdateTagDto } from "../dtos/update-tag.dto";
 
 @Controller('tags')
 export class TagController {
@@ -26,4 +28,13 @@ export class TagController {
         return await this.service.deleteAll();
     }
 
+    @Post()
+    async addTag() {
+        return this.service.create();
+    }
+
+    @Patch()
+    async updateTag(@Body() body: UpdateTagDto) {
+        return this.service.update(body);
+    }
 }

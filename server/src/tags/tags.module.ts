@@ -1,14 +1,20 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { TagController } from './controllers/tag.controller';
-import { Tag, TagSchema } from './schema/tag.schema';
+import { TagController } from './application/controllers/tag.controller';
+import { Tag, TagSchema } from './infrastructure/schema/tag.schema';
 import { UtilModule } from 'src/utils/utils.module';
-import { TagService } from './services/tag.service';
+import { TagService } from './domain/services/tag.service';
+import { TagDAO } from './infrastructure/daos/tag.dao';
 @Module({
   controllers: [TagController],
   providers: [
     // Services
-    TagService
+    TagService,
+    // Repository
+    {
+      provide: 'TagRepository',
+      useClass: TagDAO
+    }
     // Converters
 
     // Transcription Scripts
