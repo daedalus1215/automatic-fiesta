@@ -37,4 +37,9 @@ export class TagController {
     async updateTag(@Body() body: UpdateTagDto) {
         return this.service.update(body);
     }
+
+    @Post('/import-tags')
+    async importTags(@Body() body: tagDto[]) {
+        return this.service.importTags(body);
+    }
 }
