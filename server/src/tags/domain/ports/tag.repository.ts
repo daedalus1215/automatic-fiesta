@@ -8,4 +8,5 @@ export interface TagRepository {
     deleteAll(): Promise<boolean>;
     create(): Promise<TagEntity>;
     update(dto: tagDto): Promise<TagEntity>;
+    import(tagdto: tagDto): Promise<TagEntity>;
 }

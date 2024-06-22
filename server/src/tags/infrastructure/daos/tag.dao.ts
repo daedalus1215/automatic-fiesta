@@ -4,20 +4,21 @@ import { Model } from "mongoose";
 import { Injectable } from "@nestjs/common";
 import { TagRepository } from "src/tags/domain/ports/tag.repository";
 import { TagEntity } from "src/tags/domain/entities/tag.entity";
+import { tagDto } from "src/tags/domain/dtos/tag.dto";
 
 @Injectable()
 export class TagDAO implements TagRepository {
     constructor(@InjectModel(Tag.name) private model: Model<TagDocument>) { }
 
-    async findAll() {
-        return await this.model.find() as unknown as TagEntity[];
+    async findAll(): Promise<TagEntity[]> {
+        return await this.model.find();
     }
 
-    async findOne(id?: string) {
-        return await this.model.findById(id) as unknown as TagEntity;
+    async findOne(id?: string): Promise<TagEntity> {
+        return await this.model.findById(id);
     }
 
-    async delete(id: string) {
+    async delete(id: string): Promise<boolean> {
         const res = await this.model.deleteOne({ _id: id });
         if (res.deletedCount > 0) {
             return true;
@@ -26,7 +27,7 @@ export class TagDAO implements TagRepository {
         return false;
     }
 
-    async deleteAll() {
+    async deleteAll(): Promise<boolean> {
         const res = await this.model.deleteMany({});
         if (res.deletedCount > 0) {
             return true;
@@ -35,7 +36,7 @@ export class TagDAO implements TagRepository {
         return false;
     }
 
-    async create() {
+    async create(): Promise<TagEntity> {
         const tag = await this.model.create({
             description: 'temp description',
             name: 'temp name'
@@ -43,11 +44,18 @@ export class TagDAO implements TagRepository {
         return await tag.save();
     }
 
-    async update(dto) {
+    async import({ name, description }: tagDto): Promise<TagEntity> {
         const tag = await this.model.create({
-            description: 'temp description',
-            name: 'temp name'
+            description,
+            name,
         });
+        return await tag.save();
+    }
+
+    async update({ id, description, name }: tagDto) {
+        const tag = await this.model.findById(id);
+        tag.name = name;
+        tag.description = description;
         return await tag.save();
     }
 }

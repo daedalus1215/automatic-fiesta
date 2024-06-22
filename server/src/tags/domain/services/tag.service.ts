@@ -1,6 +1,4 @@
-import { InjectModel } from "@nestjs/mongoose";
-import { Tag, TagDocument } from "../../infrastructure/schema/tag.schema";
-import { Model } from "mongoose";
+import { Tag } from "../../infrastructure/schema/tag.schema";
 import { Inject, Injectable } from "@nestjs/common";
 import { TagRepository } from "../ports/tag.repository";
 import { tagDto } from "../dtos/tag.dto";
@@ -9,8 +7,8 @@ import { TagEntity } from "../entities/tag.entity";
 @Injectable()
 export class TagService {
 
-    constructor(@Inject('TagRepository') private repository: TagRepository,
-        @InjectModel(Tag.name) private model: Model<TagDocument>) {
+    constructor(
+        @Inject('TagRepository') private repository: TagRepository) {
     }
 
     async findAll() {
@@ -25,34 +23,22 @@ export class TagService {
     }
 
     async delete(id: string): Promise<any> {
-        return await this.model.deleteOne({ _id: id });
+        return await this.repository.delete(id);
     }
 
     async deleteAll(): Promise<any> {
-        return await this.model.deleteMany({});
+        return await this.repository.deleteAll();
     }
 
     async create(): Promise<Tag> {
-        const tag = await this.model.create({
-            description: 'temp description',
-            name: 'temp name'
-        });
-        return await tag.save();
+        return await this.repository.create();
     }
 
     async update(dto: tagDto): Promise<TagEntity> {
-        const tag = await this.model.findById(dto.id);
-        tag.name = dto.name;
-        tag.description = dto.description;
-        return await tag.save();
+        return this.repository.update(dto);
     }
 
-    // [x] - fetchTagById: (tagId, res) => fetchTagById(tagId, res),
-    // [x] - fetchAllTags: (res) => fetchAllTags(res),
-    // [x] - deleteTag: (tagId, res) => deleteTag(tagId, res),
-    // [x] - addTag: (dto) => addTag(dto),
-    // [x] - addTagByName: (tagName) => addTagByName(tagName), - don't need
-
-    // [] - updateTag: (tagDto) => updateTag(tagDto),
-    // [] - importTags: (tasks) => importTags(tasks),
+    importTags(tags: tagDto[]) {
+        return tags.map(async tagDto => await this.repository.import(tagDto));
+    }
 }
