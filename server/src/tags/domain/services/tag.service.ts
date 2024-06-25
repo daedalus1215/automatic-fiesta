@@ -1,7 +1,7 @@
 import { Tag } from "../../infrastructure/schema/tag.schema";
 import { Inject, Injectable } from "@nestjs/common";
-import { TagRepository } from "../ports/tag.repository";
-import { tagDto } from "../dtos/tag.dto";
+import { TagRepository } from "../ports/repositories/tag.repository";
+import { tagDto } from "../ports/dtos/tag.dto";
 import { TagEntity } from "../entities/tag.entity";
 
 @Injectable()

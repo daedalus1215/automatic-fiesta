@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from "@nestjs/common";
 import { TagService } from "../../domain/services/tag.service";
-import { tagDto } from "src/tags/domain/dtos/tag.dto";
+import { tagDto } from "../../domain/ports/dtos/tag.dto";
 import { UpdateTagDto } from "../dtos/update-tag.dto";
 
 @Controller('tags')

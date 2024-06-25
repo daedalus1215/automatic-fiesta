@@ -1,7 +1,7 @@
 import { Task } from "src/types";
 import { StringUtil } from "../string-util";
 import striptags from "striptags";
-import { TaskDocument } from "src/tasks/schema/task/task.schema";
+import { TaskDocument } from "src/tasks/infrastructure/schema/task/task.schema";
 import { Model } from "mongoose";
 
 jest.mock('striptags', () => ({

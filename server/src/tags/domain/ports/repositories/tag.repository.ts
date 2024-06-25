@@ -1,7 +1,7 @@
 import { tagDto } from "../dtos/tag.dto";
-import { TagEntity } from "../entities/tag.entity";
+import { TagEntity } from "../../entities/tag.entity";
 
-export interface TagRepository {
+export type TagRepository = {
     findAll(): Promise<TagEntity[]>;
     findOne(id?: string): Promise<TagEntity>;
     delete(id: string): Promise<boolean>;

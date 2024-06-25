@@ -1,6 +1,6 @@
 import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
-import { Task, TaskDocument } from "src/tasks/schema/task/task.schema";
+import { Task, TaskDocument } from "src/tasks/infrastructure/schema/task/task.schema";
 import { DateUtil } from "src/utils/date-util";
 import { StringUtil } from "src/utils/string-util";
 import { faker } from '@faker-js/faker';

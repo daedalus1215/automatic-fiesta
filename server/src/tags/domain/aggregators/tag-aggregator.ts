@@ -1,4 +1,4 @@
-import { tagDto } from "../dtos/tag.dto";
+import { tagDto } from "../ports/dtos/tag.dto";
 import { TagService } from "../services/tag.service";
 
 export class TagAggregator {
