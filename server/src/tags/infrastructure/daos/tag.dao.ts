@@ -2,9 +2,9 @@ import { InjectModel } from "@nestjs/mongoose";
 import { Tag, TagDocument } from "../schema/tag.schema";
 import { Model } from "mongoose";
 import { Injectable } from "@nestjs/common";
-import { TagRepository } from "src/tags/domain/ports/tag.repository";
+import { TagRepository } from "src/tags/domain/ports/repositories/tag.repository";
 import { TagEntity } from "src/tags/domain/entities/tag.entity";
-import { tagDto } from "src/tags/domain/dtos/tag.dto";
+import { tagDto } from "src/tags/domain/ports/dtos/tag.dto";
 
 @Injectable()
 export class TagDAO implements TagRepository {

@@ -4,7 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TasksModule } from './tasks/tasks.module';
-import { Task, TaskSchema } from './tasks/schema/task/task.schema';
+import { Task, TaskSchema } from './tasks/infrastructure/schema/task/task.schema';
 import { TagsModule } from './tags/tags.module';
 
 @Module({

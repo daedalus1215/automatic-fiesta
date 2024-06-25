@@ -1,13 +1,13 @@
 import { Model } from "mongoose";
 import { TasksService } from "../tasks.service";
-import { TaskDocument } from "src/tasks/schema/task/task.schema";
+import { TaskDocument } from "src/tasks/infrastructure/schema/task/task.schema";
 import { Task } from "src/types";
 import { StringUtil } from "../../../utils/string-util";
 import { FilterUtil } from "../../../utils/filter-util";
 import { DateUtil } from "../../../utils/date-util";
 import { UpdateTaskDto } from "src/tasks/dtos/update-task/update-task.dto";
 import { RandomUtils } from "../../../utils/random-utils";
-import { DateTimeDto } from "src/tasks/dtos/update-task/date-time.dto";
+import { DateTimeDto } from "src/tasks/application/dtos/update-task/date-time.dto";
 
 describe('server/src/tasks/services/__tests__/tasks.service.spec.ts', () => {
     describe('taskService', () => {

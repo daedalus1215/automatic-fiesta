@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { Model } from "mongoose";
-import { TaskDocument } from "src/tasks/schema/task/task.schema";
+import { TaskDocument } from "src/tasks/infrastructure/schema/task/task.schema";
 import { Task } from "src/types";
 import striptags from 'striptags';
 

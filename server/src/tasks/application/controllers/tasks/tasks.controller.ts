@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put, Query } from '@nestjs/common';
-import { TasksService } from '../../services/tasks.service';
+import { TasksService } from '../../../domain/services/tasks.service';
 import { UpdateTaskDto } from '../../dtos/update-task/update-task.dto';
 import { DateTimeDto } from '../../dtos/update-task/date-time.dto';
 

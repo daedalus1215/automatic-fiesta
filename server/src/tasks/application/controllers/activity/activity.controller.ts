@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from "@nestjs/common";
-import { ActivityService } from "../../services/activity.service";
+import { ActivityService } from "../../../domain/services/activity.service";
 
 @Controller('activities')
 export class ActivityController {

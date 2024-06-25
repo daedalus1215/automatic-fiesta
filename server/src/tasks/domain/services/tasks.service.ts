@@ -1,10 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Task, TaskDocument } from '../schema/task/task.schema';
+import { Task, TaskDocument } from '../../infrastructure/schema/task/task.schema';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { UpdateTaskDto } from '../dtos/update-task/update-task.dto';
-import { DateTimeDto } from '../dtos/update-task/date-time.dto';
-import { DateUtil } from '../../utils/date-util';
+import { UpdateTaskDto } from '../../application/dtos/update-task/update-task.dto';
+import { DateTimeDto } from '../../application/dtos/update-task/date-time.dto';
+import { DateUtil } from '../../../utils/date-util';
 import { FetchAllTaskTitles } from '../transacription-scripts/tasks/fetch-all-task-titles/fetch-all-task-titles.transcription-script';
 import { CreateDateTimeOfTask } from '../transacription-scripts/tasks/create-date-time.transcription-script/create-date-time.transcription-script';
 import { UpdateDateTime } from '../transacription-scripts/tasks/update-date-time/update-date-time.transcription-script';
