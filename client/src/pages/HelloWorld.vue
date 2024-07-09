@@ -9,19 +9,12 @@
     <section>
       <v-row v-if="loading">
         <v-col>
-          <v-progress-circular
-            indeterminate
-            color="primary"
-          ></v-progress-circular>
+          <v-progress-circular indeterminate color="primary"></v-progress-circular>
         </v-col>
       </v-row>
       <v-row v-else-if="error">
         <v-col>
-          <v-alert
-            dense
-            outlined
-            color="error"
-          >{{ error }}</v-alert>
+          <v-alert dense outlined color="error">{{ error }}</v-alert>
         </v-col>
       </v-row>
       <v-row v-else>
