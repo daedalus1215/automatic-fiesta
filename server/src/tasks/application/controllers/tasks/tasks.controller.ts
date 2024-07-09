@@ -23,11 +23,11 @@ export class TasksController {
         return await this.taskService.update(body);
     }
 
-    @Get('/:id')
-    async findOne(@Param('id') id?: string) {
-        console.log('findOne')
-        return await this.taskService.findOne(id);
-    }
+    // @Get('/:id')
+    // async findOne(@Param('id') id?: string) {
+    //     console.log('findOne')
+    //     return await this.taskService.findOne(id);
+    // }
 
     @Get('/tasks-titles')
     async fetchAllTaskTitles(@Query('title') title: string) {

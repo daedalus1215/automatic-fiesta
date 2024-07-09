@@ -29,20 +29,10 @@ export class FetchAllTaskTitles {
                     }
                     return true;
                 })
-                .map((task) => {
-                    // Validate and handle _id
-                    let validObjectId;
-                    if (mongoose.Types.ObjectId.isValid(task._id)) {
-                        validObjectId = task._id;
-                    } else {
-                        validObjectId = new mongoose.Types.ObjectId();
-                    }
-
-                    return {
-                        _id: validObjectId,
-                        title: (task.title !== undefined) ? this.stringUtil.truncateString(task.title, 21) : 'no title'
-                    };
-                });
+                .map((task) => ({
+                    id: task._id,
+                    title: (task.title !== undefined) ? this.stringUtil.truncateString(task.title, 21) : 'no title'
+                }));
         } catch (error) {
             console.error('Error fetching tasks:', error);
             throw new Error('Failed to fetch tasks');
