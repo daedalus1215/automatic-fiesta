@@ -1,41 +1,71 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-
-defineProps<{ msg: string }>()
-
-const count = ref(0)
-</script>
-
 <template>
-  <h1>{{ msg }}</h1>
-
-  <div class="card">
-    <button type="button" @click="count++">count is {{ count }}</button>
-    <p>
-      Edit
-      <code>components/HelloWorld.vue</code> to test HMR
-    </p>
-  </div>
-
-  <p>
-    Check out
-    <a href="https://vuejs.org/guide/quick-start.html#local" target="_blank"
-      >create-vue</a
-    >, the official Vue + Vite starter
-  </p>
-  <p>
-    Learn more about IDE Support for Vue in the
-    <a
-      href="https://vuejs.org/guide/scaling-up/tooling.html#ide-support"
-      target="_blank"
-      >Vue Docs Scaling up Guide</a
-    >.
-  </p>
-  <p class="read-the-docs">Click on the Vite and Vue logos to learn more</p>
+  <v-container>
+    <h1>Home Page</h1>
+    <v-divider></v-divider>
+    <section class="topBar">
+      Topbar
+    </section>
+    <v-divider></v-divider>
+    <section>
+      <v-row v-if="loading">
+        <v-col>
+          <v-progress-circular
+            indeterminate
+            color="primary"
+          ></v-progress-circular>
+        </v-col>
+      </v-row>
+      <v-row v-else-if="error">
+        <v-col>
+          <v-alert
+            dense
+            outlined
+            color="error"
+          >{{ error }}</v-alert>
+        </v-col>
+      </v-row>
+      <v-row v-else>
+        <v-col v-for="(task, index) in tasks" :key="index">
+          <v-card class="task" outlined>
+            <v-card-title>{{ task.title }}</v-card-title>
+            <v-card-text>
+              <p>desc</p>
+              <p>tags</p>
+              <p>options</p>
+            </v-card-text>
+          </v-card>
+        </v-col>
+      </v-row>
+    </section>
+  </v-container>
 </template>
 
+<script setup>
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+
+const tasks = ref([]);
+const loading = ref(true);
+const error = ref(null);
+
+// Function to fetch tasks from the remote URL
+const fetchTasks = async () => {
+  try {
+    const response = await axios.get('http://localhost:3000/tasks/tasks-titles');
+    tasks.value = response.data;
+  } catch (err) {
+    error.value = err.message;
+  } finally {
+    loading.value = false;
+  }
+};
+
+// Call the fetch function when the component is mounted
+onMounted(fetchTasks);
+</script>
+
 <style scoped>
-.read-the-docs {
-  color: #888;
+.task {
+  margin-bottom: 20px;
 }
 </style>

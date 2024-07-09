@@ -1,14 +1,11 @@
-<!-- src/App.vue -->
 <template>
-  <div id="app">
-    <router-view></router-view>
-  </div>
+  <v-app>
+    <v-main>
+      <HelloWorld />
+    </v-main>
+  </v-app>
 </template>
 
-<style>
-nav {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-</style>
+<script setup lang="ts">
+  //
+</script>
