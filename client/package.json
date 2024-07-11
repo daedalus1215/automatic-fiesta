@@ -4,13 +4,19 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "lint": "eslint . --ext .js,.ts,.vue",
+    "format": "prettier --write .",
   },
   "dependencies": {
     "@mdi/font": "6.2.95",
     "axios": "^1.7.2",
+    "eslint": "^9.6.0",
+    "lint-staged": "^15.2.7",
+    "prettier": "^3.3.2",
     "roboto-fontface": "*",
     "vue": "^3.4.21",
+    "vue-router": "^4.0.13",
     "vuetify": "^3.5.8"
   },
   "devDependencies": {
