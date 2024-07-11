@@ -24,7 +24,7 @@
           link
           v-for="(task, index) in tasks"
           :key="task.id"
-          @click="click"
+          @click="click(task.id)"
           outlined
         >
           {{ task.title }}
@@ -37,6 +37,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 
 const tasks = ref([])
 const loading = ref(true)
@@ -54,8 +56,8 @@ const fetchTasks = async () => {
   }
 }
 
-const click = (e) => {
-  console.log('e', e)
+const click = (id) => {
+  router.push({ name: 'Task', params: { id: id } })
 }
 
 // Call the fetch function when the component is mounted
