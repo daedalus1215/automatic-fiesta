@@ -32,6 +32,9 @@
     "vue-tsc": "^2.0.6"
   },
   "lint-staged": {
-    "**/*.{js,ts,vue}": ["eslint --fix", "prettier --write"]
+    "**/*.{js,ts,vue}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }
