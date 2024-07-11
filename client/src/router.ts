@@ -1,16 +1,16 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import TasksPage from './pages/TasksPage.vue'
-import TaskDetailPage from './pages/TaskDetailPage.vue'
+import TaskDetailPage from './pages/task-detail-page/TaskDetailPage.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'Tasks',
     component: TasksPage,
   },
   {
     path: '/task/:id',
-    name: 'TaskDetail',
+    name: 'Task',
     component: TaskDetailPage,
   },
 ]
