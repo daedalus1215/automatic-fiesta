@@ -28,6 +28,7 @@
           multiple
         ></v-select>
         <v-textarea v-model="task.description" label="Description"></v-textarea>
+        <v-btn @click="onSubmit">Save</v-btn>
       </v-form>
     </section>
   </v-container>
@@ -49,6 +50,10 @@ const task = ref({
 })
 
 const tags = ref(null)
+
+const onSubmit = (e) => {
+  console.log('e', e)
+}
 
 const fetchData = async (id) => {
   try {
