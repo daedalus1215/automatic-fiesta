@@ -39,8 +39,7 @@ provide('tasks', tasks)
     <q-layout
       view="lhh LpR lFf"
       container
-      style="height: 500px"
-      class="shadow-2 rounded-borders"
+      style="height: 96vh"
       :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
     >
       <q-header reveal :class="$q.dark.isActive ? 'bg-secondary' : 'bg-black'">
@@ -58,14 +57,8 @@ provide('tasks', tasks)
       </q-header>
 
       <q-page-container>
-        <router-view></router-view>
+        <router-view> </router-view>
       </q-page-container>
-
-      <q-footer>
-        <q-toolbar>
-          <q-toolbar-title>Footer</q-toolbar-title>
-        </q-toolbar>
-      </q-footer>
     </q-layout>
   </div>
 </template>

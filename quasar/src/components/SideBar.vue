@@ -10,7 +10,6 @@ const tasks = inject('tasks')
   <q-drawer
     v-model="drawerLeft"
     :width="200"
-    :breakpoint="700"
     bordered
     :class="$q.dark.isActive ? 'bg-secondary' : 'bg-black'"
   >

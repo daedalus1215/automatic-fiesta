@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 
@@ -10,14 +10,13 @@ const task = ref({
   description: '',
   options: [],
 })
-const error = ref(null)
 
-const fetchData = async (id) => {
+const error = ref(null)
+const formSubmit = inject('formSubmit')
+
+const fetchTask = async (id) => {
   try {
-    console.log('sss', id)
     const response = await axios.get(`http://localhost:3000/tasks/${id}`)
-    console.log('response', task)
-    console.log('responseTask', response.data)
     task.value = response.data
   } catch (err) {
     error.value = '1 Failed to load data.'
@@ -25,10 +24,13 @@ const fetchData = async (id) => {
   }
 }
 
+/**
+ * Handle initial page load
+ */
 onMounted(async () => {
   const id = route.params.id
   if (id) {
-    await fetchData(id)
+    await fetchTask(id)
     // await fetchData2()
   } else {
     error.value = 'No task ID provided.'
@@ -36,14 +38,50 @@ onMounted(async () => {
   }
 })
 
+/**
+ * If we are already on the page and user clicks on a different task, we want to make sure we re-fetch with the new id.
+ */
 watch(
   () => route.params.id,
   async (newId) => {
     if (newId) {
-      await fetchData(newId)
+      await fetchTask(newId)
     }
   }
 )
+
+const submitForm = () => {
+  console.log('Form submitted:', task.value)
+
+  return prepareAndSendTask({
+    _id: formData.get('id'),
+    description: formData.get('description') ?? '',
+    projectId: formData.get('projectId') ?? 0,
+    tags: formData.get('tags') ?? [],
+    title: formData.get('title'),
+  })
+}
+
+const prepareAndSendTask = async (updates) => {
+  const { _id, description, projectId, tags, title } = updates
+  const dateFormatted = convertDateTimeToLocalTime(new Date())
+  return await fetchApiData(`${api}task`, {
+    method: PUT,
+    body: {
+      _id,
+      date: dateFormatted,
+      WorkUnit: [
+        {
+          time: 0,
+          contractId: projectId,
+          description,
+          tags,
+          title,
+        },
+      ],
+    },
+  })
+}
 </script>
 
 <template>
@@ -54,10 +92,16 @@ watch(
         <q-toolbar-title>{{ task.title }}</q-toolbar-title>
       </q-toolbar>
     </q-page-sticky>
-    <p>{{ task.description }}</p>
+
+    <q-editor v-model="task.description" min-height="5rem" />
   </q-page>
 
   <q-page-scroller position="bottom">
     <q-btn fab icon="keyboard_arrow_up" color="red" />
   </q-page-scroller>
+  <q-footer>
+    <q-toolbar>
+      <q-btn @click="submitForm">Submit</q-btn>
+    </q-toolbar>
+  </q-footer>
 </template>
