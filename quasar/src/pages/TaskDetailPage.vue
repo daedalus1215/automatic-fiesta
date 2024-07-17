@@ -51,35 +51,32 @@ watch(
 )
 
 const submitForm = () => {
-  console.log('Form submitted:', task.value)
-
+  console.log('Form submitted:', task)
+  const { _id, description, contractId: projectId, tags, title } = task
   return prepareAndSendTask({
-    _id: formData.get('id'),
-    description: formData.get('description') ?? '',
-    projectId: formData.get('projectId') ?? 0,
-    tags: formData.get('tags') ?? [],
-    title: formData.get('title'),
+    _id,
+    description,
+    projectId,
+    tags,
+    title,
   })
 }
 
 const prepareAndSendTask = async (updates) => {
   const { _id, description, projectId, tags, title } = updates
   const dateFormatted = convertDateTimeToLocalTime(new Date())
-  return await fetchApiData(`${api}task`, {
-    method: PUT,
-    body: {
-      _id,
-      date: dateFormatted,
-      WorkUnit: [
-        {
-          time: 0,
-          contractId: projectId,
-          description,
-          tags,
-          title,
-        },
-      ],
-    },
+  return await axios.put('http://localhost:3000/task', {
+    _id,
+    date: dateFormatted,
+    WorkUnit: [
+      {
+        time: 0,
+        contractId: projectId,
+        description,
+        tags,
+        title,
+      },
+    ],
   })
 }
 </script>

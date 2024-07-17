@@ -2,6 +2,7 @@
 import { ref, onMounted, watch, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
+import convertDateTimeToLocalTime from '../utils/convertDateTimeToLocalTime'
 
 const route = useRoute()
 const task = ref({
@@ -50,58 +51,48 @@ watch(
   }
 )
 
-const submitForm = () => {
-  console.log('Form submitted:', task.value)
-
-  return prepareAndSendTask({
-    _id: formData.get('id'),
-    description: formData.get('description') ?? '',
-    projectId: formData.get('projectId') ?? 0,
-    tags: formData.get('tags') ?? [],
-    title: formData.get('title'),
-  })
-}
-
-const prepareAndSendTask = async (updates) => {
-  const { _id, description, projectId, tags, title } = updates
+const submitForm = async (e) => {
+  console.log('Form submitted:', task._value)
+  console.log('e', e)
+  const { _id, description, contractId, tags, title } = task._value
   const dateFormatted = convertDateTimeToLocalTime(new Date())
-  return await fetchApiData(`${api}task`, {
-    method: PUT,
-    body: {
-      _id,
-      date: dateFormatted,
-      WorkUnit: [
-        {
-          time: 0,
-          contractId: projectId,
-          description,
-          tags,
-          title,
-        },
-      ],
-    },
+
+  return await axios.put('http://localhost:3000/tasks', {
+    taskId: _id,
+    date: dateFormatted,
+    time: 0,
+    contractId,
+    description,
+    tags,
+    title,
   })
 }
 </script>
 
 <template>
-  <q-page style="padding-top: 60px" class="q-pa-md">
-    <q-page-sticky position="top" expand class="bg-primary text-white">
+  <form @submit.prevent="submitForm">
+    <q-page style="padding-top: 60px" class="q-pa-md">
+      <q-page-sticky position="top" expand class="bg-primary text-white">
+        <q-toolbar>
+          <q-btn flat round dense icon="map" />
+          <q-toolbar-title>
+            <input
+              v-model="task.title"
+              class="fit no-outline no-border bg-primary text-white"
+          /></q-toolbar-title>
+        </q-toolbar>
+      </q-page-sticky>
+
+      <q-editor v-model="task.description" min-height="5rem" />
+    </q-page>
+
+    <q-page-scroller position="bottom">
+      <q-btn fab icon="keyboard_arrow_up" color="red" />
+    </q-page-scroller>
+    <q-footer>
       <q-toolbar>
-        <q-btn flat round dense icon="map" />
-        <q-toolbar-title>{{ task.title }}</q-toolbar-title>
+        <q-btn type="submit">Submit</q-btn>
       </q-toolbar>
-    </q-page-sticky>
-
-    <q-editor v-model="task.description" min-height="5rem" />
-  </q-page>
-
-  <q-page-scroller position="bottom">
-    <q-btn fab icon="keyboard_arrow_up" color="red" />
-  </q-page-scroller>
-  <q-footer>
-    <q-toolbar>
-      <q-btn @click="submitForm">Submit</q-btn>
-    </q-toolbar>
-  </q-footer>
+    </q-footer>
+  </form>
 </template>
