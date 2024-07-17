@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import TaskDetailPage from './pages/TaskDetailPage.vue'
+import TaskDetailPage from './pages/task-detail-page/TaskDetailPage.vue'
 
 const routes = [
   //   {
