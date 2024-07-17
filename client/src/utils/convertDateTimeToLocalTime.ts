@@ -1,4 +1,4 @@
-import { SIXTY, THOUSAND } from '../constants'
+import { SIXTY, THOUSAND } from '../constants.ts'
 
 type convertDateTimeToLocalTimeType = (date: Date) => Date
 
