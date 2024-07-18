@@ -1,9 +1,13 @@
 <script setup>
-import { inject } from 'vue'
+import { inject, defineProps } from 'vue'
 
 const drawerLeft = inject('drawerLeft')
 const forwardToTask = inject('forwardToTask')
 const tasks = inject('tasks')
+
+const props = defineProps({
+  query: String,
+})
 </script>
 
 <template>
@@ -14,6 +18,11 @@ const tasks = inject('tasks')
     :class="$q.dark.isActive ? 'bg-secondary' : 'bg-black'"
   >
     <q-scroll-area class="fit">
+      <input
+        placeholder="test"
+        :value="query"
+        @input="$emit('update:query', $event.target.value)"
+      />
       <q-list bordered>
         <q-item v-for="task in tasks" :key="task.id">
           <q-item-section>

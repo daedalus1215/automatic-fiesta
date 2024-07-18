@@ -34,6 +34,7 @@ export class TasksController {
 
   @Get('/tasks-titles')
   async fetchAllTaskTitles(@Query('title') title: string) {
+    console.log('title', title)
     return await this.taskService.fetchAllTitles(title)
   }
 
