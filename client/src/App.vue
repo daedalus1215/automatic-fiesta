@@ -1,5 +1,5 @@
-<script setup>
-import { ref, provide, onMounted } from 'vue'
+<script setup lang="ts">
+import { ref, provide, onMounted, watch } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import SideBar from './components/SideBar.vue'
@@ -9,26 +9,52 @@ const router = useRouter()
 
 const tasks = ref([])
 const loading = ref(true)
-const error = ref(null)
+const error = ref('')
+const query = ref('')
 
-const fetchTasks = async () => {
+const fetchTasks = async (value: string) => {
   try {
-    const response = await axios.get('http://localhost:3000/tasks/tasks-titles')
-    tasks.value = response.data
-  } catch (err) {
+    console.log('value', value)
+    const response = await axios.get(getUrlToFetchTitles(value))
+    return response.data
+  } catch (err: { message: string }) {
     error.value = err.message
   } finally {
     loading.value = false
   }
 }
 
-const forwardToTask = (id) => {
+const getUrlToFetchTitles = (value: string) =>
+  value
+    ? `http://localhost:3000/tasks/tasks-titles?title=${value}`
+    : 'http://localhost:3000/tasks/tasks-titles'
+
+const forwardToTask = (id: string) => {
   console.log('forwardToTask', id)
-  router.push({ name: 'Task', params: { id: id } })
+  router.push({ name: 'Task', params: { id } })
 }
 
 // Call the fetch function when the component is mounted
-onMounted(fetchTasks)
+onMounted(async () => {
+  const response = await fetchTasks('')
+  tasks.value = response
+})
+
+watch(
+  () => query.value,
+  async (value: string) => {
+    console.log('dsadasd', value)
+    try {
+      const response = await await fetchTasks(value)
+      console.log('response', response)
+      tasks.value = response
+    } catch (err) {
+      error.value = '1 Failed to load data.'
+    } finally {
+    }
+  }
+)
+
 provide('drawerLeft', drawerLeft)
 provide('forwardToTask', forwardToTask)
 provide('tasks', tasks)
@@ -51,7 +77,7 @@ provide('tasks', tasks)
             dense
             icon="menu"
           />
-          <SideBar />
+          <SideBar v-model:query="query" />
           <q-toolbar-title>Header</q-toolbar-title>
         </q-toolbar>
       </q-header>
