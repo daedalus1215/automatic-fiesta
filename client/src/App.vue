@@ -3,6 +3,7 @@ import { ref, provide, onMounted, watch } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import SideBar from './components/SideBar.vue'
+import config from './config';
 
 const drawerLeft = ref(false)
 const router = useRouter()
@@ -26,8 +27,8 @@ const fetchTasks = async (value: string) => {
 
 const getUrlToFetchTitles = (value: string) =>
   value
-    ? `http://localhost:3000/tasks/tasks-titles?title=${value}`
-    : 'http://localhost:3000/tasks/tasks-titles'
+    ? `${config.api}tasks/tasks-titles?title=${value}`
+    : `${config.api}tasks/tasks-titles`
 
 const forwardToTask = (id: string) => {
   console.log('forwardToTask', id)

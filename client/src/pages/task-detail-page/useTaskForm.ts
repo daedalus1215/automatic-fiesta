@@ -2,6 +2,7 @@ import { ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import convertDateTimeToLocalTime from '../../utils/convertDateTimeToLocalTime'
+import config from '../../config';
 
 export const useTaskForm = () => {
   const route = useRoute()
@@ -17,7 +18,7 @@ export const useTaskForm = () => {
 
   const fetchTask = async (id: string) => {
     try {
-      const response = await axios.get(`http://localhost:3000/tasks/${id}`)
+      const response = await axios.get(`${config.api}tasks/${id}`)
       task.value = response.data
     } catch (err) {
       error.value = '1 Failed to load data.'

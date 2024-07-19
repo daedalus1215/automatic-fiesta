@@ -1,5 +1,5 @@
-<script setup>
-import { inject, defineProps } from 'vue'
+<script setup lang="ts">
+import { inject } from 'vue'
 
 const drawerLeft = inject('drawerLeft')
 const forwardToTask = inject('forwardToTask')
