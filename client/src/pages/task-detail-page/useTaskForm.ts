@@ -1,77 +1,55 @@
-import { ref, onMounted, watch } from 'vue'
+import { ref, onMounted, watch,computed } from 'vue'
 import { useRoute } from 'vue-router'
 import axios from 'axios'
 import convertDateTimeToLocalTime from '../../utils/convertDateTimeToLocalTime'
 import config from '../../config';
+import { useQuery } from '@tanstack/vue-query';
 
 export const useTaskForm = () => {
   const route = useRoute()
   const task = ref({
-    id: '',
     title: '',
     description: '',
     options: [],
+    _id:'', 
+    contractId:'', 
+    tags: []
   })
-
-  const error = ref('')
-  const loading = ref(false)
 
   const fetchTask = async (id: string) => {
-    try {
-      const response = await axios.get(`${config.api}tasks/${id}`)
-      task.value = response.data
-    } catch (err) {
-      error.value = '1 Failed to load data.'
-    } finally {
-    }
+    const response = await axios.get(`${config.api}tasks/${id}`)
+    return response.data
   }
 
-  /**
-   * Handle initial page load
-   */
-  onMounted(async () => {
-    const id = route.params.id as string
-    if (id) {
-      await fetchTask(id)
-      // await fetchData2()
-    } else {
-      error.value = 'No task ID provided.'
-      loading.value = false
-    }
-  })
+  const taskId = computed(() => route.params.id as string)
 
-  /**
-   * If we are already on the page and user clicks on a different task, we want to make sure we re-fetch with the new id.
-   */
-  watch(
-    () => route.params.id as string,
-    async (value) => {
-      if (value) {
-        await fetchTask(value)
-      }
-    }
-  )
+  const { data, isError, isLoading, isPending } = useQuery({
+    queryKey:['task', taskId],
+    queryFn: () => fetchTask(taskId.value)
+})
 
-  const submitForm = async () => {
-    console.log('Form submitted:', task._value)
-    const { _id, description, contractId, tags, title } = task._value
-    const dateFormatted = convertDateTimeToLocalTime(new Date())
 
-    return await axios.put('http://localhost:3000/tasks', {
-      taskId: _id,
-      date: dateFormatted,
-      time: 0,
-      contractId,
-      description,
-      tags,
-      title,
-    })
-  }
+//   const submitForm = async () => {
+//     console.log('Form submitted:', task.value)
+//     const { _id, description, contractId, tags, title } = task.value
+//     const dateFormatted = convertDateTimeToLocalTime(new Date())
+
+//     return await axios.put(`${config.api}tasks`, {
+//       taskId: _id,
+//       date: dateFormatted,
+//       time: 0,
+//       contractId,
+//       description,
+//       tags,
+//       title,
+//     })
+//   }
 
   return {
-    error,
-    loading,
-    submitForm,
-    task,
+    isError,
+     isLoading, 
+     isPending,
+    // submitForm,
+    data,
   }
 }

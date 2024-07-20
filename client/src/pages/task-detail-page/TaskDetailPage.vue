@@ -1,23 +1,26 @@
-<script setup>
+<script setup lang="ts">
 import {useTaskForm} from './useTaskForm'
 import PrimaryInput from '../../components/primary-input/PrimaryInput.vue'
-
-const {error, loading, submitForm, task} = useTaskForm()
+const {isError, isLoading, isPending, data} = useTaskForm()
 </script>
 
 <template>
+  <template v-if="isLoading">
+    <div v-if="isPending" class="update">Loading...</div>
+  </template>
+ <template v-else>
   <form @submit.prevent="submitForm">
     <q-page style="padding-top: 60px" class="q-pa-md">
       <q-page-sticky position="top" expand class="bg-primary text-white">
         <q-toolbar>
           <q-btn flat round dense icon="map" />
           <q-toolbar-title>
-          <PrimaryInput v-model:value="task.title" />
+          <PrimaryInput v-model:value="data.title" />
         </q-toolbar-title>
         </q-toolbar>
       </q-page-sticky>
 
-      <q-editor v-model="task.description" min-height="5rem" />
+      <q-editor v-model="data.description" min-height="5rem" />
     </q-page>
 
     <q-page-scroller position="bottom">
@@ -29,4 +32,5 @@ const {error, loading, submitForm, task} = useTaskForm()
       </q-toolbar>
     </q-footer>
   </form>
+ </template>
 </template>

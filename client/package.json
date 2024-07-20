@@ -11,6 +11,7 @@
   "dependencies": {
     "@quasar/extras": "^1.16.12",
     "@quasar/vite-plugin": "^1.7.0",
+    "@tanstack/vue-query": "^5.51.9",
     "axios": "^1.7.2",
     "quasar": "^2.16.6",
     "vue": "^3.4.29",
