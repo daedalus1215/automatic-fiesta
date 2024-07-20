@@ -1,9 +1,10 @@
 <script setup lang="ts">
+import config from './config';
+import { useQuery } from '@tanstack/vue-query'
 import { ref, provide, onMounted, watch } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
 import SideBar from './components/SideBar.vue'
-import config from './config';
 
 const drawerLeft = ref(false)
 const router = useRouter()
