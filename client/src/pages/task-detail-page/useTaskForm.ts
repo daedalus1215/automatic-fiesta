@@ -1,55 +1,53 @@
-import { ref, onMounted, watch,computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import axios from 'axios'
-import convertDateTimeToLocalTime from '../../utils/convertDateTimeToLocalTime'
-import config from '../../config';
-import { useQuery } from '@tanstack/vue-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
+import { fetchTask, putTask } from '../../utils/fetch';
 
 export const useTaskForm = () => {
-  const route = useRoute()
-  const task = ref({
-    title: '',
-    description: '',
-    options: [],
-    _id:'', 
-    contractId:'', 
-    tags: []
-  })
+    const route = useRoute();
+    const formData = ref({
+        _id: '',
+        description: '',
+        contractId: '',
+        tags: [''],
+        title: ''
+    });
+    const queryClient = useQueryClient();
 
-  const fetchTask = async (id: string) => {
-    const response = await axios.get(`${config.api}tasks/${id}`)
-    return response.data
-  }
+    const taskId = computed(() => route.params.id as string)
 
-  const taskId = computed(() => route.params.id as string)
+    const { data, isError, isLoading, isPending } = useQuery({
+        queryKey: ['task', taskId],
+        queryFn: () => fetchTask(taskId.value)
+    });
 
-  const { data, isError, isLoading, isPending } = useQuery({
-    queryKey:['task', taskId],
-    queryFn: () => fetchTask(taskId.value)
-})
+    watch(data, (newData) => {
+        if (newData) {
+            formData.value.title = newData.title
+            formData.value.description = newData.description
+            formData.value._id = newData._id
+            formData.value.contractId = newData.contractId
+            formData.value.tags = newData.tags
+        }
+    })
 
+    const { mutate } = useMutation({
+        mutationFn: putTask,
+        onSuccess: () => {
+            // Invalidate and refetch
+            queryClient.invalidateQueries({ queryKey: ['task'] })
+        },
+    })
 
-//   const submitForm = async () => {
-//     console.log('Form submitted:', task.value)
-//     const { _id, description, contractId, tags, title } = task.value
-//     const dateFormatted = convertDateTimeToLocalTime(new Date())
+    const onSubmit = () => {
+        mutate(formData.value);
+    }
 
-//     return await axios.put(`${config.api}tasks`, {
-//       taskId: _id,
-//       date: dateFormatted,
-//       time: 0,
-//       contractId,
-//       description,
-//       tags,
-//       title,
-//     })
-//   }
-
-  return {
-    isError,
-     isLoading, 
-     isPending,
-    // submitForm,
-    data,
-  }
+    return {
+        isError,
+        isLoading,
+        isPending,
+        onSubmit,
+        formData,
+    }
 }

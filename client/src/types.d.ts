@@ -1,9 +1,7 @@
 export type Task = {
-    title: string,
-    description: string,
-    options: string[],
-    contractId: string,
-    _id: string,
-    tags: string[],
-  }
-  
+  title: string,
+  description: string,
+  contractId: string,
+  _id: string,
+  tags: string[],
+}
