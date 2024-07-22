@@ -1,3 +1,9 @@
+<script setup lang="ts">
+const props = defineProps({
+  value: String,
+})
+</script>
+
 <template>
   <input
     :value="value"
@@ -5,9 +11,3 @@
     class="fit no-outline no-border bg-primary text-white"
   />
 </template>
-
-<script setup>
-const props = defineProps({
-  value: String,
-})
-</script>

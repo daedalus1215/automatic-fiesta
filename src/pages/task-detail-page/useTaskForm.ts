@@ -9,7 +9,7 @@ export const useTaskForm = () => {
         _id: '',
         description: '',
         contractId: '',
-        tags: [],
+        tags: [''],
         title: ''
     });
     const options = ref(['']);

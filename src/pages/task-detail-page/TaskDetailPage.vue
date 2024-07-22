@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useTaskForm } from "./useTaskForm";
-import PrimaryInput from "../../components/primary-input/PrimaryInput.vue";
+import PrimaryInput from "@components/primary-input/PrimaryInput.vue";
+import MultiSelectInput from "@components/multi-select-input/MultiSelectInput.vue";
 const { isError, isLoading, isPending, onSubmit, formData, options } = useTaskForm();
 </script>
 
@@ -19,15 +20,7 @@ const { isError, isLoading, isPending, onSubmit, formData, options } = useTaskFo
             </q-toolbar-title>
           </q-toolbar>
         </q-page-sticky>
-        <!-- @TODO: Left off here. -->
-        <q-select
-          filled
-          v-model="formData.tags"
-          multiple
-          :options="options"
-          style="width: 250px"
-        />
-
+        <MultiSelectInput v-model="formData.tags" :options="options"/>
         <q-editor v-model="formData.description" min-height="5rem" />
       </q-page>
 
