@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import config from './config';
-import { useQuery } from '@tanstack/vue-query'
 import { ref, provide, onMounted, watch } from 'vue'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
 import SideBar from './components/SideBar.vue'
+import writeJsonFile from './utils/writeJsonFile';
+import { fetchTasks, fetchTasksTitles } from './utils/fetch';
 
 const drawerLeft = ref(false)
 const router = useRouter()
@@ -14,31 +13,23 @@ const loading = ref(true)
 const error = ref('')
 const query = ref('')
 
-const fetchTasks = async (value: string) => {
-  try {
-    console.log('value', value)
-    const response = await axios.get(getUrlToFetchTitles(value))
-    return response.data
-  } catch (err: { message: string }) {
-    error.value = err.message
-  } finally {
-    loading.value = false
-  }
-}
-
-const getUrlToFetchTitles = (value: string) =>
-  value
-    ? `${config.api}tasks/tasks-titles?title=${value}`
-    : `${config.api}tasks/tasks-titles`
-
 const forwardToTask = (id: string) => {
   console.log('forwardToTask', id)
   router.push({ name: 'Task', params: { id } })
 }
 
+const homeOnClick = () => router.push('/');
+const downloadOnClick = async () => {
+  const allTasks = await fetchTasks()
+  writeJsonFile(allTasks);
+}
+const fileuploadOnClick = async () => {
+
+}
+
 // Call the fetch function when the component is mounted
 onMounted(async () => {
-  const response = await fetchTasks('')
+  const response = await fetchTasksTitles('')
   tasks.value = response
 })
 
@@ -47,7 +38,7 @@ watch(
   async (value: string) => {
     console.log('dsadasd', value)
     try {
-      const response = await await fetchTasks(value)
+      const response = await fetchTasksTitles(value)
       console.log('response', response)
       tasks.value = response
     } catch (err) {
@@ -70,9 +61,9 @@ provide('tasks', tasks)
           <q-btn flat @click="drawerLeft = !drawerLeft" round dense icon="menu" />
           <SideBar v-model:query="query" />
           <q-toolbar-title>
-            <q-btn square color="primary" icon="home" />
-            <q-btn square color="secondary" icon="file_download" />
-            <q-btn square color="amber" glossy text-color="black" icon="file_upload" />
+            <q-btn square color="primary" icon="home" @click="homeOnClick" />
+            <q-btn square color="secondary" icon="file_download" @click="downloadOnClick"/>
+            <q-btn square color="amber" glossy text-color="black" icon="file_upload" @click="fileuploadOnClick"/>
             <q-btn square color="brown-5" icon="bar_charts" />
             <q-btn square color="deep-orange" icon="tag" />
             <q-btn square color="black" icon="add" />

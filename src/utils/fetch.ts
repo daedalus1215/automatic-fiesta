@@ -3,6 +3,19 @@ import config from '../config';
 import { Tag, Task } from '../types'
 import convertDateTimeToLocalTime from '../utils/convertDateTimeToLocalTime'
 
+export const fetchTasks = async () => {
+    const response = await axios.get(`${config.api}tasks`)
+    return response.data
+}
+
+export const fetchTasksTitles = async (value: string) => {
+    const response = await axios.get(getUrlToFetchTitles(value))
+    return response.data
+}
+
+const getUrlToFetchTitles = (value: string) => value
+    ? `${config.api}tasks/tasks-titles?title=${value}`
+    : `${config.api}tasks/tasks-titles`
 
 export const fetchTask = async (id: string): Promise<Task> => {
     const response = await axios.get(`${config.api}tasks/${id}`)
