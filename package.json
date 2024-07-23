@@ -13,6 +13,7 @@
     "@quasar/vite-plugin": "^1.7.0",
     "@tanstack/vue-query": "^5.51.9",
     "axios": "^1.7.2",
+    "file-saver": "^2.0.5",
     "quasar": "^2.16.6",
     "vue": "^3.4.29",
     "vue-router": "^4.4.0"
@@ -21,7 +22,7 @@
     "@vitejs/plugin-vue": "^5.0.5",
     "add": "^2.0.6",
     "sass": "^1.77.8",
-    "typescript": "^5.2.2",
+    "typescript": "^5.5.4",
     "vite": "^5.3.1",
     "vue-tsc": "^2.0.21",
     "yarn": "^1.22.22"
