@@ -16,7 +16,6 @@ export const useTaskForm = () => {
 
     const queryClient = useQueryClient();
 
-
     const taskId = computed(() => route.params.id as string)
 
     const { data, isError, isLoading, isPending } = useQuery({
