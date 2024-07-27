@@ -23,13 +23,12 @@ const props = defineProps({
         :value="query"
         @input="$emit('update:query', $event.target.value)"
       />
-      <q-list bordered>
+      <q-list>
         <q-item v-for="task in tasks" :key="task.id">
           <q-item-section>
-            <q-item-label @click="forwardToTask(task.id)">{{
+            <q-item-label @click="forwardToTask(task.id)" v-ripple bordered class="my-box cursor-pointer q-hoverable">{{
               task.title
             }}</q-item-label>
-            <!-- <q-item-label caption lines="1">{{ contact.email }}</q-item-label> -->
           </q-item-section>
         </q-item>
       </q-list>

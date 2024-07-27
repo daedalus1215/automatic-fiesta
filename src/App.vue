@@ -14,7 +14,6 @@ const error = ref('')
 const query = ref('')
 
 const forwardToTask = (id: string) => {
-  console.log('forwardToTask', id)
   router.push({ name: 'Task', params: { id } })
 }
 
@@ -62,8 +61,8 @@ provide('tasks', tasks)
           <SideBar v-model:query="query" />
           <q-toolbar-title>
             <q-btn square color="primary" icon="home" @click="homeOnClick" />
-            <q-btn square color="secondary" icon="file_download" @click="downloadOnClick"/>
-            <q-btn square color="amber" glossy text-color="black" icon="file_upload" @click="fileuploadOnClick"/>
+            <q-btn square color="secondary" icon="file_download" @click="downloadOnClick" />
+            <q-btn square color="amber" glossy text-color="black" icon="file_upload" @click="fileuploadOnClick" />
             <q-btn square color="brown-5" icon="bar_charts" />
             <q-btn square color="deep-orange" icon="tag" />
             <q-btn square color="black" icon="add" />
