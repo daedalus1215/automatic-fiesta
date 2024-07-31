@@ -42,3 +42,8 @@ export const fetchTags = async (): Promise<Tag[]> => {
     const response = await axios.get(`${config.api}tags`)
     return response.data
 };
+
+export const fetchYearlyActivities = async () => {
+    const response = await axios.get(`${config.api}activities/all`)
+    return response.data
+}
