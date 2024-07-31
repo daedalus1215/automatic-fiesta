@@ -12,7 +12,6 @@ export type Tag = {
   name: string
 }
 
-
 export interface AggregateActivity {
   activities: TodaysActivity[],
   total: number;
@@ -23,5 +22,11 @@ export interface TodaysActivity {
   title: string;
   date: Date,
   totalTimeToday: number;
-  times: DateTime[]
+  times: any[]
+}
+
+export interface YearlyActivities {
+  date:string;
+  time: number;
+  titles: string[]
 }
