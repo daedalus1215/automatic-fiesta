@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import {onMounted, ref, provide} from 'vue';
-import TodayActivityList from './TodayActivityList.vue';
-import YearlyActivityGrid from './yearlyActivityGrid/YearlyActivityGrid.vue';
+import TodayActivityList from '@pages/home/TodayActivityList.vue';
 import { fetchYearlyActivities} from '../../utils/fetch'
+import YearlyActivityGrid from '@pages/home/yearlyActivityGrid/YearlyActivityGrid.vue';
 
 const yearlyActivities = ref([{}]);
 
