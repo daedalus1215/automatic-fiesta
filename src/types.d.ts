@@ -3,6 +3,7 @@ export type Task = {
   description: string,
   contractId: string,
   _id: string,
+  id: string, //@todo: pick one of these
   tags: string[],
 }
 
