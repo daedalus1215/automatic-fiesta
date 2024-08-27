@@ -10,7 +10,8 @@ export const useTaskForm = () => {
         description: '',
         contractId: '',
         tags: [''],
-        title: ''
+        title: '',
+        time: [] //@TODO Add a proper type here
     });
     const options = ref(['']);
 
@@ -29,7 +30,8 @@ export const useTaskForm = () => {
             formData.value.description = newData.description
             formData.value._id = newData._id
             formData.value.contractId = newData.contractId
-            formData.value.tags = newData.tags
+            formData.value.tags = newData.tags,
+            formData.value.time = newData.time
         }
     });
 
