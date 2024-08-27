@@ -5,6 +5,7 @@ export type Task = {
   _id: string,
   id: string, //@todo: pick one of these
   tags: string[],
+  time: []
 }
 
 export type Tag = {
