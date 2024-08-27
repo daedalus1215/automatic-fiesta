@@ -23,13 +23,13 @@ export const fetchTask = async (id: string): Promise<Task> => {
 };
 
 export const putTask = async (task: Task): Promise<Task> => {
-    const { _id, description, contractId, tags, title } = task
+    const { _id, description, contractId, tags, title, time } = task
     const dateFormatted = convertDateTimeToLocalTime(new Date())
 
     return await axios.put(`${config.api}tasks`, {
         taskId: _id,
         date: dateFormatted,
-        time: 0,
+        time,
         contractId,
         description,
         tags,
