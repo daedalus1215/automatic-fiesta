@@ -5,7 +5,7 @@ module.exports = {
         alias: {
           map: [
             ['@components', './src/components'],
-            // Add other aliases as needed
+            ['@pages', './src/pages']
           ],
           extensions: ['.ts', '.js', '.jsx', '.tsx', '.vue']
         }
