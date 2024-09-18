@@ -20,7 +20,7 @@
   </template>
   
   <script setup lang="ts">
-  import { ref, defineProps, watch, inject } from 'vue';
+  import { inject } from 'vue';
   import { useYearlyActivityGrid } from './useYearlyActivityGrid';
 
   const activities = inject('yearlyActivities');
