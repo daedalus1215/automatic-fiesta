@@ -1,7 +1,7 @@
 import { ref, computed, watch, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
-import { fetchTags, fetchTask, putTask } from '../../utils/fetch';
+import { fetchTags, fetchTask, putTask } from '@utils/fetch';
 
 export const useTaskForm = () => {
     const route = useRoute();

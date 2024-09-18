@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import displayMsInFractionalHourFormat from '../../utils/displayMsInFractionalHourFormat'
+import displayMsInFractionalHourFormat from '@utils/displayMsInFractionalHourFormat'
 import axios from 'axios';
 
 const aggregate = ref({ activities: [], total: 0 });
