@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { inject } from 'vue'
-import { Task } from '../types';
+import { Task } from '../constants';
 
 const drawerLeft = inject('drawerLeft')
 const forwardToTask = inject<(id?: string) => void>('forwardToTask')

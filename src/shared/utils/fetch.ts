@@ -1,7 +1,7 @@
 import axios from 'axios'
-import config from '../config';
-import { Tag, Task } from '../types'
+import { Tag, Task } from '../constants'
 import convertDateTimeToLocalTime from '../utils/convertDateTimeToLocalTime'
+import config from '../../config'
 
 export const fetchTasks = async () => {
     const response = await axios.get(`${config.api}tasks`)
