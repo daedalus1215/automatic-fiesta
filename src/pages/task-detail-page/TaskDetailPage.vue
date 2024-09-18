@@ -2,7 +2,25 @@
 import { useTaskForm } from "./useTaskForm";
 import PrimaryInput from "@components/primary-input/PrimaryInput.vue";
 import MultiSelectInput from "@components/multi-select-input/MultiSelectInput.vue";
+import { onMounted, onUnmounted, ref } from "vue";
+import Editor from "../../shared/components/editor/Editor.vue";
+import MiniEditor from "../../shared/components/mini-editor/MiniEditor.vue";
 const { isError, isLoading, isPending, onSubmit, formData, options } = useTaskForm();
+const isMobile = ref(false);
+
+const checkMobile = () => {
+  isMobile.value = window.innerWidth < 600; // Adjust the breakpoint as needed
+  console.log('isMobile', isMobile.value)
+};
+
+onMounted(() => {
+  checkMobile();
+  window.addEventListener('resize', checkMobile);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkMobile);
+});
 </script>
 
 <template>
@@ -15,13 +33,24 @@ const { isError, isLoading, isPending, onSubmit, formData, options } = useTaskFo
         <q-page-sticky position="top" expand class="bg-primary text-white">
           <q-toolbar>
             <q-btn flat round dense icon="map" />
-            <q-toolbar-title>
+            <q-toolbar-title v-if="$q.screen.gt.sm"> <!-- Show only on larger screens -->
               <PrimaryInput v-model:value="formData.title" />
             </q-toolbar-title>
           </q-toolbar>
         </q-page-sticky>
-        <MultiSelectInput v-model="formData.tags" :options="options"/>
-        <q-editor v-model="formData.description" min-height="5rem" />
+        <MultiSelectInput v-model="formData.tags" :options="options" />
+        <MiniEditor v-if="isMobile" v-model="formData.description" :onSubmit="onSubmit" />
+        <Editor v-else v-model="formData.description" :onSubmit="onSubmit" />
+        <!-- 
+        <q-editor v-model="formData.description" min-height="5rem" :definitions="{
+          bold: { label: 'Bold', icon: null, tip: 'My bold tooltip' },
+          save: {
+            tip: 'Save your work',
+            icon: 'save',
+            label: 'Save',
+            handler: onSubmit
+          }
+        }" /> -->
       </q-page>
 
       <q-page-scroller position="bottom">
@@ -35,3 +64,18 @@ const { isError, isLoading, isPending, onSubmit, formData, options } = useTaskFo
     </q-form>
   </div>
 </template>
+
+
+<style scoped>
+@media (max-width: 600px) {
+  .q-toolbar {
+    height: 48px;
+    /* Adjust height for mobile */
+  }
+
+  .q-toolbar-title {
+    font-size: 1rem;
+    /* Adjust font size */
+  }
+}
+</style>
