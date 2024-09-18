@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, provide, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import SideBar from './components/SideBar.vue'
-import writeJsonFile from './utils/writeJsonFile';
-import { fetchTasks, fetchTasksTitles } from './utils/fetch';
+import SideBar from '@components/SideBar.vue'
+import writeJsonFile from '@utils/writeJsonFile';
+import { fetchTasks, fetchTasksTitles } from '@utils/fetch';
 
 const drawerLeft = ref(false)
 const router = useRouter()
