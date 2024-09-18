@@ -14,7 +14,9 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@components': resolve(__dirname, 'src/components'),
+      '@shared': resolve(__dirname, 'src/shared'),
+      '@components': resolve(__dirname, 'src/shared/components'),
+      '@utils':resolve(__dirname, 'src/shared/utils'),
       '@pages': resolve(__dirname, 'src/pages')
     },
   },
