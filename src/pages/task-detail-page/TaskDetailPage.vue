@@ -5,23 +5,10 @@
   import { onMounted, onUnmounted, ref } from 'vue';
   import Editor from '../../shared/components/editor/Editor.vue';
   import MiniEditor from '../../shared/components/mini-editor/MiniEditor.vue';
+import { useCheckMobile } from '../../shared/hooks/useCheckMobile';
   const { isError, isLoading, isPending, onSubmit, formData, options } =
     useTaskForm();
-  const isMobile = ref(false);
-
-  const checkMobile = () => {
-    isMobile.value = window.innerWidth < 600; // Adjust the breakpoint as needed
-    console.log('isMobile', isMobile.value);
-  };
-
-  onMounted(() => {
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-  });
-
-  onUnmounted(() => {
-    window.removeEventListener('resize', checkMobile);
-  });
+  const isMobile = useCheckMobile();
 </script>
 
 <template>
@@ -34,8 +21,7 @@
         <q-page-sticky position="top" expand class="bg-primary text-white">
           <q-toolbar>
             <q-btn flat round dense icon="save" type="submit" />
-            <q-toolbar-title >
-              <!-- Show only on larger screens -->
+            <q-toolbar-title>
               <PrimaryInput v-model:value="formData.title" />
             </q-toolbar-title>
           </q-toolbar>
@@ -47,15 +33,6 @@
           :onSubmit="onSubmit"
         />
         <Editor v-else v-model="formData.description" :onSubmit="onSubmit" />
-        <!-- 
-        <q-editor v-model="formData.description" min-height="5rem" :definitions="{
-          bold: { label: 'Bold', icon: null, tip: 'My bold tooltip' },
-          save: { tip: 'Save your work',
-            icon: 'save',
-            label: 'Save',
-            handler: onSubmit
-          }
-        }" /> -->
       </q-page>
 
       <q-page-scroller position="bottom">
