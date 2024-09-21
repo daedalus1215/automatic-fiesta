@@ -1,4 +1,8 @@
 {
+  "vueIndentScriptAndStyle": true,
+  "htmlWhitespaceSensitivity": "ignore",
+  "singleQuote": true,
+  "bracketSameLine": false,
   "printWidth": 80,
-  "htmlWhitespaceSensitivity": "ignore"
+  "jsxBracketSameLine": false
 }

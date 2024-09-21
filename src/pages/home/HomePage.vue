@@ -1,21 +1,20 @@
 <script setup lang="ts">
-import {onMounted, ref, provide} from 'vue';
-import TodayActivityList from '@pages/home/TodayActivityList.vue';
-import YearlyActivityGrid from '@pages/home/yearlyActivityGrid/YearlyActivityGrid.vue';
-import { fetchYearlyActivities } from '@utils/fetch';
+  import { onMounted, ref, provide } from 'vue';
+  import TodayActivityList from '@pages/home/TodayActivityList.vue';
+  import YearlyActivityGrid from '@pages/home/yearlyActivityGrid/YearlyActivityGrid.vue';
+  import { fetchYearlyActivities } from '@utils/fetch';
 
-const yearlyActivities = ref([{}]);
+  const yearlyActivities = ref([{}]);
 
-onMounted(async () => {
+  onMounted(async () => {
     const response = await fetchYearlyActivities();
     yearlyActivities.value = response;
-});
+  });
 
-provide('yearlyActivities', yearlyActivities);
-
+  provide('yearlyActivities', yearlyActivities);
 </script>
 <template>
-    <h3>Homepage</h3>
-    <TodayActivityList />
-    <YearlyActivityGrid />
+  <h3>Homepage</h3>
+  <TodayActivityList />
+  <YearlyActivityGrid />
 </template>
