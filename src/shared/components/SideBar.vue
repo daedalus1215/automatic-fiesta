@@ -1,37 +1,46 @@
-
 <script setup lang="ts">
-import { ref, watch, defineProps, defineEmits } from 'vue';
+  import { ref, watch, defineProps, defineEmits } from 'vue';
 
-const props = defineProps({
-  query: String,
-  tasks: Array,
-  drawerLeft: Boolean,
-});
+  const props = defineProps({
+    query: String,
+    tasks: Array,
+    drawerLeft: Boolean,
+  });
 
-const emit = defineEmits(['update:query', 'update:drawerLeft', 'forwardToTask']);
+  const emit = defineEmits([
+    'update:query',
+    'update:drawerLeft',
+    'forwardToTask',
+  ]);
 
-// Local states for reactivity
-const localQuery = ref(props.query);
-const localDrawerLeft = ref(props.drawerLeft);
+  // Local states for reactivity
+  const localQuery = ref(props.query);
+  const localDrawerLeft = ref(props.drawerLeft);
 
-// Emit changes to the drawer state
-watch(() => props.drawerLeft, (newVal) => {
-  localDrawerLeft.value = newVal;
-});
+  // Emit changes to the drawer state
+  watch(
+    () => props.drawerLeft,
+    (newVal) => {
+      localDrawerLeft.value = newVal;
+    },
+  );
 
-watch(localDrawerLeft, (newVal) => {
-  emit('update:drawerLeft', newVal);
-});
+  watch(localDrawerLeft, (newVal) => {
+    emit('update:drawerLeft', newVal);
+  });
 
-// Emit query updates
-watch(localQuery, (newVal) => {
-  emit('update:query', newVal);
-});
+  // Emit query updates
+  watch(localQuery, (newVal) => {
+    emit('update:query', newVal);
+  });
 
-// Sync localQuery with the prop query
-watch(() => props.query, (newVal) => {
-  localQuery.value = newVal;
-});
+  // Sync localQuery with the prop query
+  watch(
+    () => props.query,
+    (newVal) => {
+      localQuery.value = newVal;
+    },
+  );
 </script>
 
 <template>
