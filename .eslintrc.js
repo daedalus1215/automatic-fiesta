@@ -7,10 +7,10 @@ module.exports = {
           ['@components', './src/shared/components'],
           ['@shared', './src/shared'],
           ['@utils', './src/shared/utils'],
-          ['@pages', './src/pages']
+          ['@pages', './src/pages'],
         ],
-        extensions: ['.ts', '.js', '.jsx', '.tsx', '.vue']
-      }
-    }
-  }
+        extensions: ['.ts', '.js', '.jsx', '.tsx', '.vue'],
+      },
+    },
+  },
 };
