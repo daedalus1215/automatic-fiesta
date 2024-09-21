@@ -5,7 +5,7 @@
   import { onMounted, onUnmounted, ref } from 'vue';
   import Editor from '../../shared/components/editor/Editor.vue';
   import MiniEditor from '../../shared/components/mini-editor/MiniEditor.vue';
-import { useCheckMobile } from '../../shared/hooks/useCheckMobile';
+  import { useCheckMobile } from '../../shared/hooks/useCheckMobile';
   const { isError, isLoading, isPending, onSubmit, formData, options } =
     useTaskForm();
   const isMobile = useCheckMobile();
