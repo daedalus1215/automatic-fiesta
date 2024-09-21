@@ -1,30 +1,53 @@
+
 <script setup lang="ts">
-  import { inject } from 'vue';
-  import { Task } from '../constants';
+import { ref, watch, defineProps, defineEmits } from 'vue';
 
-  const drawerLeft = inject('drawerLeft');
-  const forwardToTask = inject<(id?: string) => void>('forwardToTask');
-  const tasks = inject<Task[]>('tasks');
+const props = defineProps({
+  query: String,
+  tasks: Array,
+  drawerLeft: Boolean,
+});
 
-  const props = defineProps({
-    query: String,
-  });
+const emit = defineEmits(['update:query', 'update:drawerLeft', 'forwardToTask']);
+
+// Local states for reactivity
+const localQuery = ref(props.query);
+const localDrawerLeft = ref(props.drawerLeft);
+
+// Emit changes to the drawer state
+watch(() => props.drawerLeft, (newVal) => {
+  localDrawerLeft.value = newVal;
+});
+
+watch(localDrawerLeft, (newVal) => {
+  emit('update:drawerLeft', newVal);
+});
+
+// Emit query updates
+watch(localQuery, (newVal) => {
+  emit('update:query', newVal);
+});
+
+// Sync localQuery with the prop query
+watch(() => props.query, (newVal) => {
+  localQuery.value = newVal;
+});
 </script>
 
 <template>
-  <q-drawer v-model="drawerLeft" :width="200" bordered>
+  <q-drawer v-model="localDrawerLeft" :width="200" bordered>
     <q-scroll-area class="fit">
       <q-input
         class="q-pa-xs q-ma-sm bg-white text-black outlined"
-        placeholder="search"
-        :value="query"
+        placeholder="Search"
         type="search"
-        @input="$emit('update:query', $event.target.value)"
+        v-model="localQuery"
       >
         <template v-slot:append>
           <q-icon name="search" />
         </template>
       </q-input>
+
       <q-list>
         <q-item v-for="task in tasks" :key="task.id">
           <q-item-section>
@@ -39,14 +62,6 @@
           </q-item-section>
         </q-item>
       </q-list>
-
-      <!-- <div class="q-pa-sm">
-        <div v-for="task in tasks" :key="n" @click="forwardToTask(task.id)">
-          {{ task.title }}
-        </div>
-      </div> -->
     </q-scroll-area>
   </q-drawer>
 </template>
-
-<style scoped></style>
