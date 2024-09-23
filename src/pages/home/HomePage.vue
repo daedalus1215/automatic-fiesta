@@ -13,8 +13,8 @@
 
   provide('yearlyActivities', yearlyActivities);
 </script>
+
 <template>
-  <h3>Homepage</h3>
   <TodayActivityList />
   <YearlyActivityGrid />
 </template>
