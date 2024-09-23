@@ -1,9 +1,18 @@
 <script setup lang="ts">
-  import { ref, watch, defineProps, defineEmits } from 'vue';
+  import { ref, watch, defineProps, defineEmits, PropType } from 'vue';
+
+  const forwardToTask = (taskId: string) => {
+    emit('forwardToTask', taskId);
+  };
+
+  type Task = {
+    id: string;
+    title: string;
+  };
 
   const props = defineProps({
     query: String,
-    tasks: Array,
+    tasks: Array as PropType<Task[]>,
     drawerLeft: Boolean,
   });
 
@@ -13,11 +22,9 @@
     'forwardToTask',
   ]);
 
-  // Local states for reactivity
   const localQuery = ref(props.query);
   const localDrawerLeft = ref(props.drawerLeft);
 
-  // Emit changes to the drawer state
   watch(
     () => props.drawerLeft,
     (newVal) => {
@@ -29,12 +36,10 @@
     emit('update:drawerLeft', newVal);
   });
 
-  // Emit query updates
   watch(localQuery, (newVal) => {
     emit('update:query', newVal);
   });
 
-  // Sync localQuery with the prop query
   watch(
     () => props.query,
     (newVal) => {
