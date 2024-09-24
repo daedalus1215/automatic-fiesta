@@ -2,9 +2,8 @@
   import { useTaskForm } from './useTaskForm';
   import PrimaryInput from '@components/primary-input/PrimaryInput.vue';
   import MultiSelectInput from '@components/multi-select-input/MultiSelectInput.vue';
-  import { onMounted, onUnmounted, ref } from 'vue';
-  import Editor from '../../shared/components/editor/Editor.vue';
-  import MiniEditor from '../../shared/components/mini-editor/MiniEditor.vue';
+  import Editor from '@components/editor/Editor.vue';
+  import MiniEditor from '@components/mini-editor/MiniEditor.vue';
   import { useCheckMobile } from '../../shared/hooks/useCheckMobile';
   const { isError, isLoading, isPending, onSubmit, formData, options } =
     useTaskForm();
@@ -38,6 +37,10 @@
       <q-page-scroller position="bottom">
         <q-btn fab icon="keyboard_arrow_up" color="red" />
       </q-page-scroller>
+
+      <q-page-scroller reverse position="top" :scroll-offset="20" :offset="[0, 18]">
+            <q-btn fab icon="keyboard_arrow_down" color="accent" />
+          </q-page-scroller>
     </q-form>
   </div>
 </template>
