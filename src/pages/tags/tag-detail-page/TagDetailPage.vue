@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import { useTaskForm } from './useTaskForm';
+  import { useTagForm } from './useTagForm';
   import PrimaryInput from '@components/primary-input/PrimaryInput.vue';
-  import MultiSelectInput from '@components/multi-select-input/MultiSelectInput.vue';
   import Editor from '@components/editor/Editor.vue';
   import MiniEditor from '@components/mini-editor/MiniEditor.vue';
-  import { useCheckMobile } from '../../shared/hooks/useCheckMobile';
+  import { useCheckMobile } from '@shared/hooks/useCheckMobile';
   const { isError, isLoading, isPending, onSubmit, formData, options } =
-    useTaskForm();
+    useTagForm();
   const isMobile = useCheckMobile();
 </script>
 
@@ -25,7 +24,6 @@
             </q-toolbar-title>
           </q-toolbar>
         </q-page-sticky>
-        <MultiSelectInput v-model="formData.tags" :options="options" />
         <MiniEditor
           v-if="isMobile"
           v-model="formData.description"
