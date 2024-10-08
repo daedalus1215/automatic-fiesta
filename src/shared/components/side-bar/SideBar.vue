@@ -57,7 +57,7 @@
         type="search"
         v-model="localQuery"
       >
-        <template v-slot:append>
+        <template v-slot:prepend>
           <q-icon name="search" />
         </template>
       </q-input>

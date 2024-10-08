@@ -1,15 +1,23 @@
 <script setup lang="ts">
-  import { ref, computed } from 'vue';
+  import { ref, computed, onMounted } from 'vue';
   import displayMsInFractionalHourFormat from '@utils/displayMsInFractionalHourFormat';
   import axios from 'axios';
+  import { fetchTags } from '../../shared/utils/fetch';
+  import MultiSelectInput from '../../shared/components/multi-select-input/MultiSelectInput.vue';
 
   const aggregate = ref({ activities: [], total: 0 });
   const error = ref(null);
+  const formData = ref({
+    includeTags:[''],
+    excludeTags:[''],
+  });
+  const options = ref([]);
 
   const fetchTodaysActivities = async () => {
+    const date = new Date().toLocaleDateString('en-US').split('/');
     try {
       const response = await axios.get(
-        'http://localhost:3000/activities/today?date=07-21-24',
+        `http://localhost:3000/activities/today?date=${date[0]}-${date[1]}-${date[2]}`,
       );
       const data = response.data;
       aggregate.value.activities = data.activities;
@@ -21,15 +29,25 @@
       error.value = error.message;
     }
   };
-
   fetchTodaysActivities();
 
   const formattedTotal = computed(() =>
     displayMsInFractionalHourFormat(aggregate.value.total),
   );
+
+  onMounted(async () => {
+        const tags = await fetchTags();
+        options.value = tags.map(tag => tag.name) || [];
+    })
+
+
 </script>
 
 <template>
+  
+    <MultiSelectInput v-model="formData.includeTags" :options="options" icon="bookmark" label="Include Tags"/>
+    <MultiSelectInput v-model="formData.excludeTags" :options="options" icon="bookmark_border" label="Exclude Tags"/>
+  
   <div>Total: {{ formattedTotal }}</div>
   <q-list class="TodaysActivityList">
     <q-item
@@ -47,6 +65,12 @@
 </template>
 
 <style scoped>
+  .filters {
+    display: flex;
+    /* justify-content: space-between; */
+    margin: 10px;
+    max-width: 800px;     
+  }
   .TodaysActivityList {
     margin: 10px;
     max-height: 300px;
