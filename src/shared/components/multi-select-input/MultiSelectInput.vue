@@ -2,6 +2,8 @@
   const props = defineProps({
     value: [String],
     options: [String],
+    icon: String,
+    label: String
   });
 </script>
 
@@ -13,5 +15,10 @@
     multiple
     :options="options"
     style="width: 250px"
-  />
+    :label="props.label"
+    >
+    <template v-slot:prepend>
+        <q-icon :name="props.icon" />
+        </template>
+    </q-select> 
 </template>
